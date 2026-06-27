@@ -664,6 +664,7 @@
     // In the original paper grid, the first four cells in each row are the more positive/steadying experiences.
     const POSITIVE_CELL_COUNT = 4;
     const LOWER_THRESHOLD = POSITIVE_CELL_COUNT;
+    const ALL_ROWS_COMPLETE_INDEX = rows.length;
     // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
     const HIGHER_THRESHOLD = 70;
     const SLIDER_LOWER_THRESHOLD = 30;
@@ -683,12 +684,12 @@
     }
 
     function setWhatNextVisibility() {
-      whatNext.classList.toggle("visible", furthestUnlockedRow >= rows.length);
+      whatNext.classList.toggle("visible", furthestUnlockedRow >= ALL_ROWS_COMPLETE_INDEX);
     }
 
     function advanceRow(rowIndex) {
       furthestUnlockedRow = Math.max(furthestUnlockedRow, rowIndex + 1);
-      activeRowIndex = Math.min(rowIndex + 1, rows.length);
+      activeRowIndex = Math.min(rowIndex + 1, ALL_ROWS_COMPLETE_INDEX);
       renderRows();
     }
 
@@ -704,13 +705,13 @@
         summary.textContent = `${count} selected`;
 
         const isFuture = rowIndex > furthestUnlockedRow;
-        const isActive = rowIndex === activeRowIndex && activeRowIndex < rows.length;
+        const isActive = rowIndex === activeRowIndex && activeRowIndex < ALL_ROWS_COMPLETE_INDEX;
         const isCompleted = rowIndex < furthestUnlockedRow;
 
         group.classList.toggle("future", isFuture);
         group.classList.toggle("active", isActive);
         toggle.hidden = !isCompleted;
-        toggle.textContent = isActive ? "Collapse" : "Expand / edit";
+        toggle.textContent = group.classList.contains("active") ? "Collapse" : "Expand / edit";
       });
       setWhatNextVisibility();
     }
@@ -738,7 +739,7 @@
       toggle.hidden = true;
       toggle.addEventListener("click", () => {
         if (activeRowIndex === rowIndex) {
-          activeRowIndex = rows.length;
+          activeRowIndex = ALL_ROWS_COMPLETE_INDEX;
         } else {
           activeRowIndex = rowIndex;
         }
