@@ -689,7 +689,7 @@
 
     function advanceRow(rowIndex) {
       furthestUnlockedRow = Math.max(furthestUnlockedRow, rowIndex + 1);
-      activeRowIndex = Math.min(rowIndex + 1, ALL_ROWS_COMPLETE_INDEX);
+      activeRowIndex = rowIndex + 1 >= ALL_ROWS_COMPLETE_INDEX ? null : rowIndex + 1;
       renderRows();
     }
 
@@ -705,7 +705,7 @@
         summary.textContent = `${count} selected`;
 
         const isFuture = rowIndex > furthestUnlockedRow;
-        const isActive = rowIndex === activeRowIndex && activeRowIndex < ALL_ROWS_COMPLETE_INDEX;
+        const isActive = rowIndex === activeRowIndex;
         const isCompleted = rowIndex < furthestUnlockedRow;
 
         group.classList.toggle("future", isFuture);
@@ -739,7 +739,7 @@
       toggle.hidden = true;
       toggle.addEventListener("click", () => {
         if (activeRowIndex === rowIndex) {
-          activeRowIndex = ALL_ROWS_COMPLETE_INDEX;
+          activeRowIndex = null;
         } else {
           activeRowIndex = rowIndex;
         }
