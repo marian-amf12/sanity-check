@@ -667,16 +667,19 @@
     // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
     const HIGHER_THRESHOLD = 70;
     const LINE_LOWER_THRESHOLD = 30;
-    // Keep both legacy thresholds aligned: first four options (indices 0-3) are positive.
-    const POSITIVE_LIMIT = Math.min(POSITIVE_CELL_COUNT, LOWER_THRESHOLD);
 
     let activeRowIndex = 0;
     let furthestUnlockedRow = 0;
     const rowElements = [];
+    const rowInputs = rows.map(() => []);
+
+    function isPositiveChoice(itemIndex) {
+      // Required mapping: items 0-3 are positive, items 4-7 are negative.
+      return itemIndex < POSITIVE_CELL_COUNT && itemIndex < LOWER_THRESHOLD;
+    }
 
     function selectedCount(rowIndex) {
-      const rowChoices = grid.querySelectorAll(`[data-row-index="${rowIndex}"] input[type="checkbox"]`);
-      return Array.from(rowChoices).filter((input) => input.checked).length;
+      return rowInputs[rowIndex].filter((input) => input.checked).length;
     }
 
     function setWhatNextVisibility() {
@@ -760,13 +763,14 @@
 
       row.forEach((item, itemIndex) => {
         const label = document.createElement("label");
-        label.className = `choice ${itemIndex < POSITIVE_LIMIT ? "positive" : "negative"}`;
+        label.className = `choice ${isPositiveChoice(itemIndex) ? "positive" : "negative"}`;
         label.setAttribute("data-row-index", rowIndex);
 
         const input = document.createElement("input");
         input.type = "checkbox";
         input.name = `experience-${rowIndex}-${itemIndex}`;
         input.value = item;
+        rowInputs[rowIndex].push(input);
         input.addEventListener("change", () => {
           // Auto-advance only on first pass through the flow; completed rows stay editable without forcing a jump.
           if (isFirstPassActiveRow(rowIndex) && selectedCount(rowIndex) > 0) {
