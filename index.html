@@ -14,12 +14,9 @@
       --border: #cfe0e4;
       --accent: #2f7f82;
       --accent-soft: #d8eff0;
-      --positive: #edf8f0;
-      --positive-border: #b9dfc3;
-      --negative: #fff1f1;
-      --negative-border: #e7c1c1;
       --print-mark: #1e293b;
       --shadow: 0 20px 45px rgba(25, 60, 72, 0.08);
+      --shadow-sm: 0 4px 14px rgba(25, 60, 72, 0.05);
     }
 
     * { box-sizing: border-box; }
@@ -31,6 +28,7 @@
       background:
         radial-gradient(circle at top left, rgba(47, 127, 130, 0.12), transparent 28%),
         linear-gradient(180deg, #f4fbfb 0%, var(--bg) 100%);
+      min-height: 100vh;
     }
 
     a { color: var(--accent); }
@@ -38,231 +36,366 @@
     .page {
       max-width: 780px;
       margin: 0 auto;
-      padding: 24px;
+      padding: 32px 24px 48px;
     }
 
+    /* ── Header ── */
     .header {
       display: flex;
       align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 24px;
-      margin-bottom: 24px;
-      text-align: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
     }
 
     .title-wrap h1 {
-      margin: 0 0 8px;
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      line-height: 1;
-    }
-
-    .title-wrap p {
       margin: 0;
-      font-size: 1.05rem;
-      color: var(--muted);
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.02em;
     }
 
     .print-button {
+      flex-shrink: 0;
       border: 0;
       border-radius: 999px;
-      padding: 14px 22px;
+      padding: 12px 20px;
       background: linear-gradient(135deg, var(--accent), #235c6a);
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.9rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: var(--shadow);
       white-space: nowrap;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
-    .privacy-note {
-      margin: 0 0 24px;
-      padding: 14px 18px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.75);
-      border: 1px solid var(--border);
-      color: var(--muted);
+    .print-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(47, 127, 130, 0.28);
     }
 
-    .layout { display: grid; gap: 20px; }
-
+    /* ── Panels ── */
     .panel {
-      background: rgba(255, 255, 255, 0.88);
+      background: rgba(255, 255, 255, 0.9);
       border: 1px solid rgba(207, 224, 228, 0.95);
       border-radius: 24px;
-      padding: 22px;
+      padding: 26px 28px;
       box-shadow: var(--shadow);
       backdrop-filter: blur(4px);
+      margin-bottom: 20px;
     }
 
     .panel h2 {
-      margin: 0 0 16px;
-      font-size: 1.35rem;
-    }
-
-    .panel h3 {
-      margin: 24px 0 10px;
-      font-size: 1rem;
+      margin: 0 0 14px;
+      font-size: 1.4rem;
+      letter-spacing: -0.01em;
     }
 
     .panel p,
     .panel li,
-    .panel label,
     .panel .small-note {
       color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .steps {
-      margin: 0;
-      padding-left: 20px;
-    }
-
-    .grid-wrap { display: grid; gap: 14px; }
-
-    .row-group {
-      background: var(--panel-alt);
-      border-radius: 20px;
-      border: 1px solid var(--border);
-      padding: 16px;
-    }
-
-    .row-group.future {
-      display: none;
-    }
-
-    .row-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .row-title {
-      margin: 0;
-      font-size: 1.03rem;
-      color: var(--text);
-    }
-
-    .row-summary {
-      color: var(--muted);
-      font-size: 0.86rem;
-      white-space: nowrap;
-    }
-
-    .row-toggle {
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: #fff;
-      color: var(--accent);
-      font-weight: 700;
-      font-size: 0.82rem;
-      padding: 6px 12px;
-      cursor: pointer;
-    }
-
-    .row-body {
-      margin-top: 12px;
-      display: none;
-    }
-
-    .row-group.active .row-body {
-      display: block;
-    }
-
-    .progress-note {
-      font-size: 0.84rem;
-      color: var(--muted);
+      line-height: 1.6;
       margin: 0 0 10px;
     }
 
+    .panel p:last-child,
+    .panel .small-note:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── How it works ── */
+    .how-it-works-lead {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text);
+      margin: 0 0 6px;
+    }
+
+    .how-it-works-prompt {
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text);
+      margin: 0 0 16px;
+    }
+
+    /* ── Progress bar ── */
+    .progress-bar-wrap {
+      height: 4px;
+      background: var(--border);
+      border-radius: 999px;
+      margin-bottom: 22px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+      width: 0%;
+    }
+
+    /* ── Column sections ── */
+    .column-section {
+      margin-bottom: 10px;
+    }
+
+    .column-section.future {
+      display: none;
+    }
+
+    .column-section.animate-in {
+      animation: slideUp 0.3s ease both;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Active column card ── */
+    .column-card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(207, 224, 228, 0.9);
+      border-radius: 20px;
+      padding: 22px 22px 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .column-header {
+      margin-bottom: 16px;
+    }
+
+    .column-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 0 0 5px;
+    }
+
+    .column-theme {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Option choices ── */
     .choices-stack {
-      display: grid;
-      gap: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .choice {
-      position: relative;
       display: block;
+      position: relative;
     }
 
-    .choice input {
+    .choice input[type="radio"] {
       position: absolute;
       opacity: 0;
-      inset: 0;
+      width: 1px;
+      height: 1px;
       pointer-events: none;
     }
 
     .choice-text {
       display: flex;
-      align-items: flex-start;
-      gap: 10px;
+      align-items: center;
+      gap: 14px;
       border-radius: 16px;
       border: 1px solid var(--border);
-      padding: 14px 12px;
-      font-size: 0.92rem;
-      line-height: 1.35;
+      padding: 16px 18px;
+      font-size: 1rem;
+      line-height: 1.5;
       cursor: pointer;
-      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
       width: 100%;
     }
 
-    .choice-text::before {
-      content: "";
-      flex: 0 0 18px;
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 2px solid currentColor;
-      margin-top: 1px;
-      opacity: 0.55;
-    }
-
-    .choice.positive .choice-text {
-      background: var(--positive);
-      border-color: var(--positive-border);
-      color: #234a2e;
-    }
-
-    .choice.negative .choice-text {
-      background: var(--negative);
-      border-color: var(--negative-border);
-      color: #6e2a2a;
-    }
-
-    .choice input:checked + .choice-text {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 22px rgba(24, 51, 58, 0.12);
+    .choice-text:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(25, 60, 72, 0.1);
       border-color: var(--accent);
-      background: #ffffff;
-      color: var(--text);
-      font-weight: 600;
     }
 
-    .choice input:checked + .choice-text::before {
+    /* Radio circle */
+    .radio-dot {
+      flex-shrink: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .radio-dot::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    /* Selected state */
+    .choice input[type="radio"]:checked + .choice-text {
+      box-shadow: inset 4px 0 0 var(--accent), 0 6px 20px rgba(47, 127, 130, 0.1) !important;
+      border-color: rgba(47, 127, 130, 0.35);
+      background: rgba(47, 127, 130, 0.05) !important;
+      font-weight: 600;
+      transform: translateY(0);
+    }
+
+    .choice input[type="radio"]:checked + .choice-text .radio-dot {
       background: var(--accent);
       border-color: var(--accent);
-      box-shadow: inset 0 0 0 3px #fff;
+      box-shadow: 0 0 0 3px rgba(47, 127, 130, 0.18);
+    }
+
+    .choice input[type="radio"]:checked + .choice-text .radio-dot::after {
       opacity: 1;
     }
 
+    /* ── Next button ── */
     .next-wrap {
-      margin-top: 12px;
+      margin-top: 16px;
       display: flex;
       justify-content: flex-end;
     }
 
     .next-btn {
+      display: none;
       border: 0;
       border-radius: 999px;
-      padding: 10px 16px;
+      padding: 12px 26px;
       background: var(--accent);
       color: #fff;
+      font-size: 1rem;
       font-weight: 700;
       cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
     }
 
+    .next-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(47, 127, 130, 0.3);
+    }
+
+    .next-btn.visible {
+      display: inline-block;
+      animation: fadeIn 0.2s ease both;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ── Collapsed column summary ── */
+    .column-collapsed {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(207, 224, 228, 0.9);
+      border-radius: 16px;
+      padding: 14px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .column-collapsed.visible {
+      display: flex;
+    }
+
+    .collapsed-theme {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text);
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .collapsed-answer {
+      flex: 1;
+      min-width: 0;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 999px;
+      padding: 4px 14px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .collapsed-edit {
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px 8px;
+      text-decoration: underline;
+      white-space: nowrap;
+    }
+
+    /* ── Summary section ── */
+    .summary-section {
+      display: none;
+    }
+
+    .summary-section.visible {
+      display: block;
+    }
+
+    .summary-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .summary-item {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      padding: 13px 16px;
+      background: var(--panel-alt);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .summary-item-theme {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .summary-item-answer {
+      font-size: 0.97rem;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.4;
+    }
+
+    /* ── What next section ── */
     .what-next {
       display: none;
     }
@@ -271,28 +404,9 @@
       display: block;
     }
 
-    .extras {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    .field,
-    .textarea,
-    .text-input {
-      width: 100%;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 14px;
-      background: #fff;
-      color: var(--text);
-      font: inherit;
-    }
-
-    .textarea {
-      min-height: 110px;
-      resize: vertical;
+    /* ── Fields ── */
+    .field-group {
+      margin-bottom: 16px;
     }
 
     .field-label {
@@ -303,126 +417,65 @@
       color: var(--text);
     }
 
-    .divider-card {
-      margin-top: 24px;
-      padding: 18px;
-      border-radius: 20px;
-      background: linear-gradient(180deg, rgba(216, 239, 240, 0.65), rgba(255, 255, 255, 0.85));
-      border: 1px solid var(--border);
-    }
-
-    .slider-wrap {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 18px;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .range-label {
-      font-size: 0.88rem;
-      font-weight: 700;
-      color: var(--text);
-      max-width: 88px;
-      text-align: center;
-    }
-
-    .slider-stack {
-      position: relative;
-      min-height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .scale {
-      position: relative;
+    .textarea,
+    .text-input {
       width: 100%;
-      max-width: 84px;
-      min-height: 240px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 13px 15px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+      font-size: 0.95rem;
+      line-height: 1.5;
     }
 
-    .scale-track {
-      position: absolute;
-      inset: 12px auto;
-      width: 6px;
-      border-radius: 999px;
-      background: linear-gradient(180deg, #85c7bf 0%, #c6d7db 50%, #efb3b3 100%);
-      height: calc(100% - 24px);
-    }
-
-    .line-indicator {
-      position: absolute;
-      left: 50%;
-      width: 110px;
-      height: 4px;
-      border-radius: 999px;
-      background: var(--accent);
-      transform: translate(-50%, var(--line-offset, 50%));
-      top: var(--line-position, 50%);
-      box-shadow: 0 4px 16px rgba(47, 127, 130, 0.28);
-      pointer-events: none;
-    }
-
-    .range-input {
-      position: absolute;
-      width: 240px;
-      transform: rotate(-90deg);
-      accent-color: var(--accent);
-      background: transparent;
-    }
-
-    .slider-caption {
-      margin: 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .textarea {
+      min-height: 110px;
+      resize: vertical;
     }
 
     .prompt-list {
-      display: grid;
+      display: flex;
+      flex-direction: column;
       gap: 14px;
+      margin-top: 20px;
     }
 
+    /* ── Info box ── */
     .info-box {
-      margin-top: 20px;
-      padding: 16px;
+      margin-top: 22px;
+      padding: 16px 18px;
       border-radius: 18px;
       background: var(--accent-soft);
       border: 1px solid #bddadc;
       color: #234b57;
+      line-height: 1.6;
+      font-size: 0.95rem;
     }
 
+    /* ── Footer ── */
     .footer {
-      margin-top: 24px;
+      margin-top: 28px;
       display: flex;
       justify-content: space-between;
       gap: 16px;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       color: var(--muted);
     }
 
-    .print-summary {
-      display: none;
-    }
-
-    .screen-only {
-      display: inline;
-    }
-
-    @media (max-width: 760px) {
-      .page { padding: 16px; }
-      .row-top { flex-wrap: wrap; }
-      .extras { grid-template-columns: 1fr; }
-      .slider-wrap { grid-template-columns: 1fr; }
-      .range-label { max-width: none; }
-      .slider-stack { min-height: 220px; }
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .page { padding: 20px 16px 40px; }
+      .header { flex-wrap: wrap; }
+      .panel { padding: 20px 18px; }
+      .column-card { padding: 18px 16px 14px; }
+      .column-collapsed { flex-wrap: wrap; }
+      .collapsed-answer { white-space: normal; text-overflow: unset; }
       .footer { flex-direction: column; }
     }
 
+    /* ── Print ── */
     @media print {
       :root {
         --text: #111827;
@@ -436,7 +489,7 @@
       }
 
       body {
-        background: #fff;
+        background: #fff !important;
         font-size: 10pt;
       }
 
@@ -445,97 +498,50 @@
         padding: 0;
       }
 
-      .print-button {
-        display: none !important;
-      }
+      .print-button { display: none !important; }
+      .progress-bar-wrap { display: none !important; }
+      .next-wrap { display: none !important; }
 
-      .privacy-note {
-        background: #fff;
-      }
+      /* Expand everything */
+      .column-section.future { display: block !important; }
+      .column-card { display: block !important; }
+      .column-collapsed { display: none !important; }
+      .summary-section { display: block !important; }
+      .what-next { display: block !important; }
 
       .panel,
-      .row-group,
-      .divider-card,
-      .choice-text,
-      .field,
-      .textarea,
-      .text-input,
+      .column-card,
       .info-box,
-      .privacy-note {
+      .summary-item,
+      .textarea,
+      .text-input {
         box-shadow: none !important;
         background: #fff !important;
         backdrop-filter: none !important;
-      }
-
-      .panel,
-      .row-group,
-      .divider-card,
-      .field,
-      .textarea,
-      .text-input,
-      .info-box,
-      .privacy-note {
         border-color: #9ca3af !important;
       }
 
       .choice-text {
-        padding: 6px 7px;
-        border-width: 1px;
-        font-size: 8.1pt;
+        padding: 8px 10px;
+        font-size: 9pt;
       }
 
-      .choice-text::before {
-        width: 12px;
-        height: 12px;
-        flex-basis: 12px;
-        border-width: 1.5px;
+      .radio-dot {
+        width: 14px;
+        height: 14px;
       }
 
-      .choice input:checked + .choice-text::before {
+      .choice input[type="radio"]:checked + .choice-text {
+        font-weight: 700;
+        border-color: var(--print-mark) !important;
+        background: #f3f4f6 !important;
+        box-shadow: none !important;
+      }
+
+      .choice input[type="radio"]:checked + .choice-text .radio-dot {
         background: var(--print-mark) !important;
         border-color: var(--print-mark) !important;
-        box-shadow: inset 0 0 0 1.5px #fff !important;
-      }
-
-      .choice input:checked + .choice-text {
-        font-weight: 700;
-        border-color: var(--print-mark) !important;
-      }
-
-      .slider-stack {
-        min-height: 170px;
-      }
-
-      .scale {
-        min-height: 160px;
-      }
-
-      .range-input {
-        display: none;
-      }
-
-      .print-summary {
-        display: inline;
-        font-weight: 700;
-        color: var(--accent);
-      }
-
-      .screen-only {
-        display: none !important;
-      }
-
-      .row-group.future,
-      .what-next {
-        display: block !important;
-      }
-
-      .row-body {
-        display: block !important;
-      }
-
-      .row-toggle,
-      .next-wrap {
-        display: none !important;
+        box-shadow: none !important;
       }
 
       .footer {
@@ -547,99 +553,77 @@
 </head>
 <body>
   <div class="page">
+
+    <!-- Header -->
     <header class="header">
       <div class="title-wrap">
         <h1>Sanity Check</h1>
-        <p>In connection with chemsex, I'm experiencing...</p>
       </div>
       <button class="print-button" type="button" onclick="window.print()">🖨 Print / Save as PDF</button>
     </header>
 
-    <p class="privacy-note">
-      Fill this in privately on your own device. Nothing is submitted or stored — you can print or save the page as a PDF when you're ready.
-    </p>
+    <!-- Section 1: How it works -->
+    <section class="panel">
+      <h2>How it works</h2>
+      <p class="how-it-works-lead">Choose what fits for each theme, then move to the next one.</p>
+      <p class="how-it-works-prompt">In connection with chemsex, I'm experiencing...</p>
+      <p>This check-in is for people who want to reflect on how chemsex is showing up in their lives right now. There are no scores and no right answers — just a moment to notice what feels true for you today.</p>
+      <p>There are 8 themes. For each one, pick the single option that best reflects where you're at. Only one choice per theme.</p>
+      <p class="small-note">🔒 Nothing is stored or submitted. Fill this in privately on your own device and print or save as PDF when you're ready.</p>
+    </section>
 
-    <main class="layout">
-      <section class="panel">
-        <h2>How it works</h2>
-        <p>This check-in is for people who want to reflect on how chemsex is showing up in their lives right now.</p>
-        <ol class="steps">
-          <li>Select the statements that fit where you're at today.</li>
-          <li>Set your red line: what still feels acceptable, and what you would rather avoid.</li>
-        </ol>
-        <h3>How to use this page</h3>
-        <p>There are no scores and no right answers. Use it to notice what feels good, what feels difficult, and what you may want to change.</p>
-        <h3>Tip</h3>
-        <p>If you want to discuss it with someone, bring your printed or saved version to a trusted professional or support contact.</p>
-      </section>
+    <!-- Section 2: Where you're at -->
+    <section class="panel">
+      <h2>Where you're at</h2>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
+      <div id="columns-container"></div>
+    </section>
 
-      <section class="panel">
-        <h2>Where you're at</h2>
-        <p class="small-note">Choose what fits for each row, then move to the next one.</p>
-        <div id="grid" class="grid-wrap"></div>
-      </section>
+    <!-- Section 3: Summary (auto-shown after all 8 answered) -->
+    <section id="summary-section" class="panel summary-section">
+      <h2>Here's what you said</h2>
+      <p class="small-note">In connection with chemsex, I said I'm experiencing:</p>
+      <div id="summary-list" class="summary-list"></div>
+    </section>
 
-      <section id="what-next" class="panel what-next">
-        <h2>What next?</h2>
+    <!-- Section 4: What next? -->
+    <section id="what-next" class="panel what-next">
+      <h2>What next?</h2>
+
+      <div class="field-group">
+        <label class="field-label" for="goal">My Sanity Check goal:</label>
+        <textarea class="textarea" id="goal" placeholder="e.g. more self control / less frequent sessions / abstinence"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="commitment">Today/from now on, I will:</label>
+        <textarea class="textarea" id="commitment" placeholder="e.g. quit my most problematic substance, go home at dawn, make other plans for this weekend, book a counseling session, delete certain apps/contacts..."></textarea>
+      </div>
+
+      <div class="prompt-list">
         <div>
-          <label class="field-label" for="goal">My Sanity Check goal:</label>
-          <textarea class="textarea" id="goal" placeholder="e.g. more self control / less frequent sessions / abstinence"></textarea>
+          <label class="field-label" for="strategies">What strategies can help you stick to your line?</label>
+          <textarea class="textarea" id="strategies" placeholder="Write down what helps you protect your boundaries."></textarea>
         </div>
         <div>
-          <label class="field-label" for="commitment">Today/from now on, I will:</label>
-          <textarea class="textarea" id="commitment" placeholder="e.g. quit my most problematic substance, go home at dawn, make other plans for this weekend, book a counseling session, delete certain apps/contacts..."></textarea>
+          <label class="field-label" for="issues">Are there any particular issues you want to address?</label>
+          <textarea class="textarea" id="issues" placeholder="Write down anything that needs attention."></textarea>
         </div>
-        <div class="extras">
-          <div>
-            <label class="field-label" for="extra-positive">Additional positive effects:</label>
-            <input class="text-input" id="extra-positive" type="text" placeholder="Add your own notes">
-          </div>
-          <div>
-            <label class="field-label" for="extra-negative">Additional negative effects:</label>
-            <input class="text-input" id="extra-negative" type="text" placeholder="Add your own notes">
-          </div>
+        <div>
+          <label class="field-label" for="partners">Which of your chemsex partners share your boundaries?</label>
+          <textarea class="textarea" id="partners" placeholder="List names, initials, or qualities if helpful."></textarea>
         </div>
+      </div>
 
-        <div class="divider-card">
-          <h2>Your red line</h2>
-          <div class="slider-wrap">
-            <div class="range-label">Above = acceptable to me</div>
-            <div>
-              <div class="slider-stack">
-                <div class="scale">
-                  <div class="scale-track"></div>
-                  <div class="line-indicator" id="line-indicator"></div>
-                  <input id="red-line" class="range-input" type="range" min="0" max="100" value="50" aria-label="Your red line">
-                </div>
-              </div>
-              <p class="slider-caption">Red line position: <span id="line-value" class="print-summary">middle</span><span class="screen-only"> <span id="line-value-screen">middle</span></span></p>
-            </div>
-            <div class="range-label">Below = would prefer to avoid</div>
-          </div>
+      <div class="info-box">
+        Want to talk about it? At GGD Amsterdam chemsex counseling we're happy to discuss any thoughts and feelings you have about your sex life and your substance use.
+      </div>
 
-          <div class="prompt-list">
-            <div>
-              <label class="field-label" for="strategies">What strategies can help you stick to your line?</label>
-              <textarea class="textarea" id="strategies" placeholder="Write down what helps you protect your boundaries."></textarea>
-            </div>
-            <div>
-              <label class="field-label" for="issues">Are there any particular issues you want to address?</label>
-              <textarea class="textarea" id="issues" placeholder="Write down anything that needs attention."></textarea>
-            </div>
-            <div>
-              <label class="field-label" for="partners">Which of your chemsex partners share your boundaries?</label>
-              <textarea class="textarea" id="partners" placeholder="List names, initials, or qualities if helpful."></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="info-box">
-          Want to talk about it? At GGD Amsterdam chemsex counseling we're happy to discuss any thoughts and feelings you have about your sex life and your substance use.
-        </div>
-
-        <p><a href="https://ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks">ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks</a></p>
-        <p class="small-note">Need more information about substances, harm reduction tips, support groups or specialised care? → <a href="https://chemsex.nl">chemsex.nl</a></p>
-      </section>
-    </main>
+      <p style="margin-top:14px;"><a href="https://ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks">ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks</a></p>
+      <p class="small-note">Need more information about substances, harm reduction tips, support groups or specialised care? → <a href="https://chemsex.nl">chemsex.nl</a></p>
+    </section>
 
     <footer class="footer">
       <span>Inspired by the Chemsex Check format. <a href="original.html">View the original reference page</a>.</span>
@@ -648,187 +632,372 @@
   </div>
 
   <script>
-    const rows = [
-      ["adventure", "relief from shame and inhibitions", "sex is more enjoyable than ever", "self-confidence boost", "I feel like part of a community", "meaningful new friendship or relationship", "I'm also enjoying sober sex more now", "It's less important for me than it used to be"],
-      ["fun", "intimacy", "I am in good, caring company", "I generally stick to my plans and boundaries", "It generally leaves me feeling satisfied", "I have a fulfilling sex life", "I'm also enjoying my sober life", "the amount of chemsex in my life is stable"],
-      ["I spend a lot of time looking for it", "frequent bacterial STIs", "I've neglected some former hobbies", "I'm seeing old friends less", "sex acts that I'm not really into sober", "situations that I later regret", "I keep going for 2–3 days", "It's getting more prominent in my life"],
-      ["GBL/GHB more than once a week", "Mephedrone or 3-MMC more than once a month", "I forget my PrEP or HIV meds now & then", "I worry for some of the people I encounter", "I meet some people because they share drugs", "It's affecting my looks", "low mood & low energy lasting several days", "I feel ashamed of my chemsex"],
-      ["I take G without exact dosing and timing", "I share straws or pipes", "Tina or Monkey Dust regularly", "It's affecting my relationship with my partner", "I need a higher dose than I used to", "I don't have sober sex", "all my closest friends engage in chemsex", "I want to make a change"],
-      ["I'm not protecting myself against HIV", "I forget my PrEP or HIV meds regularly", "I inject (slam)", "chemsex (just about) every weekend", "my focus has shifted from sex to being high", "I also use alone", "I refuse until I run out", "I've tried to make changes but failed"],
-      ["I combine G + alcohol", "I'm not sure everything was consensual", "I share needles or injecting equipment", "I've missed days at work/uni", "problems with sleep/irritability/anxiety", "I can't stop thinking about it", "episodes of paranoia, hallucinations", "I use GBL/GHB 24/7"],
-      ["I combine poppers + Viagra", "I've overdosed on G", "I've overdosed on G several times", "I've needed emergency medical attention", "violations of consent", "I was newly diagnosed with HIV", "lost my job/dropped out of school", "suicidal thoughts"]
+    // ── Column data (transposed from original 8×8 grid) ──
+    const columns = [
+      {
+        theme: "Adventure & excitement",
+        options: [
+          "adventure",
+          "fun",
+          "I spend a lot of time looking for it",
+          "GBL/GHB more than once a week",
+          "I take G without exact dosing and timing",
+          "I'm not protecting myself against HIV",
+          "I combine G + alcohol",
+          "I combine poppers + Viagra"
+        ]
+      },
+      {
+        theme: "Connection & social life",
+        options: [
+          "relief from shame and inhibitions",
+          "intimacy",
+          "frequent bacterial STIs",
+          "Mephedrone or 3-MMC more than once a month",
+          "I share straws or pipes",
+          "I forget my PrEP or HIV meds regularly",
+          "I'm not sure everything was consensual",
+          "I've overdosed on G"
+        ]
+      },
+      {
+        theme: "Enjoyment & experience",
+        options: [
+          "sex is more enjoyable than ever",
+          "I am in good, caring company",
+          "I've neglected some former hobbies",
+          "I forget my PrEP or HIV meds now & then",
+          "Tina or Monkey Dust regularly",
+          "I inject (slam)",
+          "I share needles or injecting equipment",
+          "I've overdosed on G several times"
+        ]
+      },
+      {
+        theme: "Plans & boundaries",
+        options: [
+          "self-confidence boost",
+          "I generally stick to my plans and boundaries",
+          "I'm seeing old friends less",
+          "I worry for some of the people I encounter",
+          "It's affecting my relationship with my partner",
+          "chemsex (just about) every weekend",
+          "I've missed days at work/uni",
+          "I've needed emergency medical attention"
+        ]
+      },
+      {
+        theme: "Belonging & community",
+        options: [
+          "I feel like part of a community",
+          "It generally leaves me feeling satisfied",
+          "sex acts that I'm not really into sober",
+          "I meet some people because they share drugs",
+          "I need a higher dose than I used to",
+          "my focus has shifted from sex to being high",
+          "problems with sleep/irritability/anxiety",
+          "violations of consent"
+        ]
+      },
+      {
+        theme: "Relationships & sex life",
+        options: [
+          "meaningful new friendship or relationship",
+          "I have a fulfilling sex life",
+          "situations that I later regret",
+          "It's affecting my looks",
+          "I don't have sober sex",
+          "I also use alone",
+          "I can't stop thinking about it",
+          "I was newly diagnosed with HIV"
+        ]
+      },
+      {
+        theme: "Sober life & balance",
+        options: [
+          "I'm also enjoying sober sex more now",
+          "I'm also enjoying my sober life",
+          "I keep going for 2\u20133 days",
+          "low mood & low energy lasting several days",
+          "all my closest friends engage in chemsex",
+          "I refuse until I run out",
+          "episodes of paranoia, hallucinations",
+          "lost my job/dropped out of school"
+        ]
+      },
+      {
+        theme: "Overall impact",
+        options: [
+          "It's less important for me than it used to be",
+          "the amount of chemsex in my life is stable",
+          "It's getting more prominent in my life",
+          "I feel ashamed of my chemsex",
+          "I want to make a change",
+          "I've tried to make changes but failed",
+          "I use GBL/GHB 24/7",
+          "suicidal thoughts"
+        ]
+      }
     ];
 
-    const grid = document.getElementById("grid");
-    const whatNext = document.getElementById("what-next");
-    // In the original paper grid, the first four cells in each row are the more positive/steadying experiences.
-    const POSITIVE_CELL_COUNT = 4;
-    const LOWER_THRESHOLD = POSITIVE_CELL_COUNT;
-    const ALL_ROWS_COMPLETE_INDEX = rows.length;
-    const NO_ACTIVE_ROW = -1;
-    // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
-    const HIGHER_THRESHOLD = 70;
-    const SLIDER_LOW_LABEL_THRESHOLD = 30;
+    var AUTO_ADVANCE_DELAY_MS = 400;
 
-    let activeRowIndex = 0;
-    let furthestUnlockedRow = 0;
-    const rowElements = [];
-    const rowInputs = rows.map(() => []);
-
-    function isPositiveChoice(itemIndex) {
-      // Required mapping: items 0-3 are positive, items 4-7 are negative.
-      return itemIndex < LOWER_THRESHOLD;
+    // ── Gradient tint: top = cool (#f0f7f7), middle = white, bottom = warm (#fdf5f0) ──
+    function getOptionTint(index, total) {
+      if (total <= 1) return "rgb(255,255,255)";
+      var t = index / (total - 1); // 0 → 1
+      var r, g, b;
+      if (t <= 0.5) {
+        var s = t / 0.5;
+        r = Math.round(240 + (255 - 240) * s);
+        g = Math.round(247 + (255 - 247) * s);
+        b = Math.round(247 + (255 - 247) * s);
+      } else {
+        var s = (t - 0.5) / 0.5;
+        r = Math.round(255 + (253 - 255) * s);
+        g = Math.round(255 + (245 - 255) * s);
+        b = Math.round(255 + (240 - 255) * s);
+      }
+      return "rgb(" + r + "," + g + "," + b + ")";
     }
 
-    function selectedCount(rowIndex) {
-      return rowInputs[rowIndex].filter((input) => input.checked).length;
+    // ── DOM references ──
+    var container     = document.getElementById("columns-container");
+    var progressBar   = document.getElementById("progress-bar");
+    var summarySection = document.getElementById("summary-section");
+    var summaryList   = document.getElementById("summary-list");
+    var whatNext      = document.getElementById("what-next");
+
+    // ── State ──
+    var furthestCompleted = 0;            // number of columns completed (0 = none)
+    var selectedValues = new Array(columns.length).fill(null);
+    var columnElements = [];              // div.column-section per column
+    var nextButtons    = [];              // .next-btn per column
+
+    // ── Progress bar ──
+    function updateProgress() {
+      var done = selectedValues.filter(function(v) { return v !== null; }).length;
+      progressBar.style.width = ((done / columns.length) * 100) + "%";
     }
 
-    function setWhatNextVisibility() {
-      whatNext.classList.toggle("visible", furthestUnlockedRow >= ALL_ROWS_COMPLETE_INDEX);
-    }
+    // ── Summary ──
+    function renderSummary() {
+      summaryList.innerHTML = "";
+      columns.forEach(function(col, i) {
+        if (selectedValues[i] === null) return;
+        var item = document.createElement("div");
+        item.className = "summary-item";
 
-    function advanceRow(rowIndex) {
-      furthestUnlockedRow = Math.max(furthestUnlockedRow, rowIndex + 1);
-      const nextRowIndex = rowIndex + 1;
-      if (nextRowIndex >= ALL_ROWS_COMPLETE_INDEX) activeRowIndex = NO_ACTIVE_ROW;
-      else activeRowIndex = nextRowIndex;
-      renderRows();
-    }
+        var theme = document.createElement("span");
+        theme.className = "summary-item-theme";
+        theme.textContent = col.theme;
 
-    function isFirstPassActiveRow(rowIndex) {
-      return rowIndex === activeRowIndex && rowIndex === furthestUnlockedRow;
-    }
+        var answer = document.createElement("span");
+        answer.className = "summary-item-answer";
+        answer.textContent = selectedValues[i];
 
-    function renderRows() {
-      rowElements.forEach((group, rowIndex) => {
-        const count = selectedCount(rowIndex);
-        const summary = group.querySelector(".row-summary");
-        const toggle = group.querySelector(".row-toggle");
-        summary.textContent = `${count} selected`;
-
-        const isFuture = rowIndex > furthestUnlockedRow;
-        const isActive = rowIndex === activeRowIndex;
-        const isCompleted = rowIndex < furthestUnlockedRow;
-
-        group.classList.toggle("future", isFuture);
-        group.classList.toggle("active", isActive);
-        toggle.hidden = !isCompleted;
-        toggle.textContent = group.classList.contains("active") ? "Collapse" : "Expand / edit";
+        item.appendChild(theme);
+        item.appendChild(answer);
+        summaryList.appendChild(item);
       });
-      setWhatNextVisibility();
     }
 
-    rows.forEach((row, rowIndex) => {
-      const group = document.createElement("section");
-      group.className = "row-group";
-      group.setAttribute("data-row-index", rowIndex);
+    function updateSummaryAndNext() {
+      var allDone = selectedValues.every(function(v) { return v !== null; });
+      summarySection.classList.toggle("visible", allDone);
+      whatNext.classList.toggle("visible", allDone);
+      if (allDone) renderSummary();
+    }
 
-      const top = document.createElement("div");
-      top.className = "row-top";
+    // ── Collapse a completed column ──
+    function collapseColumn(colIndex) {
+      var el = columnElements[colIndex];
+      var card = el.querySelector(".column-card");
+      var collapsed = el.querySelector(".column-collapsed");
+      var answerChip = collapsed.querySelector(".collapsed-answer");
 
-      const title = document.createElement("h3");
-      title.className = "row-title";
-      title.textContent = row[0];
+      card.style.display = "none";
+      answerChip.textContent = selectedValues[colIndex];
+      collapsed.classList.add("visible");
+    }
 
-      const summary = document.createElement("span");
-      summary.className = "row-summary";
-      summary.textContent = "0 selected";
+    // ── Expand a completed column for editing ──
+    function expandColumn(colIndex) {
+      var el = columnElements[colIndex];
+      var card = el.querySelector(".column-card");
+      var collapsed = el.querySelector(".column-collapsed");
 
-      const toggle = document.createElement("button");
-      toggle.type = "button";
-      toggle.className = "row-toggle";
-      toggle.textContent = "Expand / edit";
-      toggle.hidden = true;
-      toggle.addEventListener("click", () => {
-        if (activeRowIndex === rowIndex) {
-          activeRowIndex = NO_ACTIVE_ROW;
-        } else {
-          activeRowIndex = rowIndex;
+      card.style.display = "";
+      collapsed.classList.remove("visible");
+
+      // Show next button since this column already has a value
+      nextButtons[colIndex].classList.add("visible");
+
+      // Scroll to the re-opened column
+      setTimeout(function() {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 50);
+    }
+
+    // ── Advance after column is answered ──
+    function advanceColumn(colIndex) {
+      var isFirstPass = (colIndex + 1 > furthestCompleted);
+
+      collapseColumn(colIndex);
+
+      if (isFirstPass) {
+        furthestCompleted = colIndex + 1;
+        if (furthestCompleted < columns.length) {
+          var nextEl = columnElements[furthestCompleted];
+          nextEl.classList.remove("future");
+          nextEl.classList.add("animate-in");
         }
-        renderRows();
-      });
+      }
 
-      top.appendChild(title);
-      top.appendChild(summary);
-      top.appendChild(toggle);
-      group.appendChild(top);
+      updateProgress();
+      updateSummaryAndNext();
 
-      const body = document.createElement("div");
-      body.className = "row-body";
-
-      const progress = document.createElement("p");
-      progress.className = "progress-note";
-      progress.textContent = `Row ${rowIndex + 1} of ${rows.length}`;
-      body.appendChild(progress);
-
-      const options = document.createElement("div");
-      options.className = "choices-stack";
-
-      row.forEach((item, itemIndex) => {
-        const label = document.createElement("label");
-        label.className = `choice ${isPositiveChoice(itemIndex) ? "positive" : "negative"}`;
-        label.setAttribute("data-row-index", rowIndex);
-
-        const input = document.createElement("input");
-        input.type = "checkbox";
-        input.name = `experience-${rowIndex}-${itemIndex}`;
-        input.value = item;
-        rowInputs[rowIndex].push(input);
-        input.addEventListener("change", () => {
-          // Auto-advance only on first pass through the flow; completed rows stay editable without forcing a jump.
-          if (isFirstPassActiveRow(rowIndex) && selectedCount(rowIndex) > 0) {
-            advanceRow(rowIndex);
-            return;
+      // Scroll forward only on first pass
+      if (isFirstPass) {
+        setTimeout(function() {
+          if (furthestCompleted < columns.length) {
+            columnElements[furthestCompleted].scrollIntoView({ behavior: "smooth", block: "start" });
+          } else {
+            summarySection.scrollIntoView({ behavior: "smooth", block: "start" });
           }
-          renderRows();
-        });
+        }, 120);
+      }
+    }
 
-        const text = document.createElement("span");
-        text.className = "choice-text";
-        text.textContent = item;
+    // ── Build columns ──
+    columns.forEach(function(col, colIndex) {
+      var section = document.createElement("div");
+      section.className = "column-section" + (colIndex > 0 ? " future" : "");
 
-        label.appendChild(input);
-        label.appendChild(text);
-        options.appendChild(label);
+      // Collapsed summary row
+      var collapsed = document.createElement("div");
+      collapsed.className = "column-collapsed";
+
+      var collapsedTheme = document.createElement("span");
+      collapsedTheme.className = "collapsed-theme";
+      collapsedTheme.textContent = col.theme;
+
+      var collapsedAnswer = document.createElement("span");
+      collapsedAnswer.className = "collapsed-answer";
+
+      var editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "collapsed-edit";
+      editBtn.textContent = "Edit";
+      (function(idx) {
+        editBtn.addEventListener("click", function() { expandColumn(idx); });
+      })(colIndex);
+
+      collapsed.appendChild(collapsedTheme);
+      collapsed.appendChild(collapsedAnswer);
+      collapsed.appendChild(editBtn);
+
+      // Active column card
+      var card = document.createElement("div");
+      card.className = "column-card";
+
+      var header = document.createElement("div");
+      header.className = "column-header";
+
+      var labelEl = document.createElement("p");
+      labelEl.className = "column-label";
+      labelEl.textContent = "Theme " + (colIndex + 1) + " of " + columns.length;
+
+      var themeEl = document.createElement("h3");
+      themeEl.className = "column-theme";
+      themeEl.textContent = col.theme;
+
+      header.appendChild(labelEl);
+      header.appendChild(themeEl);
+      card.appendChild(header);
+
+      // Options stack
+      var stack = document.createElement("div");
+      stack.className = "choices-stack";
+
+      col.options.forEach(function(option, optIndex) {
+        var labelWrap = document.createElement("label");
+        labelWrap.className = "choice";
+
+        var input = document.createElement("input");
+        input.type = "radio";
+        input.name = "column-" + colIndex;
+        input.value = option;
+
+        var choiceText = document.createElement("span");
+        choiceText.className = "choice-text";
+        choiceText.style.background = getOptionTint(optIndex, col.options.length);
+
+        var radioDot = document.createElement("span");
+        radioDot.className = "radio-dot";
+
+        var textSpan = document.createElement("span");
+        textSpan.textContent = option;
+
+        choiceText.appendChild(radioDot);
+        choiceText.appendChild(textSpan);
+        labelWrap.appendChild(input);
+        labelWrap.appendChild(choiceText);
+        stack.appendChild(labelWrap);
+
+        // Change handler — using IIFE to capture correct indices
+        (function(ci, opt) {
+          var autoTimer = null;
+          input.addEventListener("change", function() {
+            selectedValues[ci] = opt;
+            nextButtons[ci].classList.add("visible");
+
+            // Auto-advance only on first pass (not when editing a completed column)
+            if (ci >= furthestCompleted) {
+              clearTimeout(autoTimer);
+              autoTimer = setTimeout(function() { advanceColumn(ci); }, AUTO_ADVANCE_DELAY_MS);
+            }
+          });
+
+          // Expose cancel function so the Next button click handler can abort auto-advance
+          input._cancelTimer = function() { clearTimeout(autoTimer); };
+        })(colIndex, option);
       });
 
-      body.appendChild(options);
+      card.appendChild(stack);
 
-      const nextWrap = document.createElement("div");
+      // Next button
+      var nextWrap = document.createElement("div");
       nextWrap.className = "next-wrap";
-      const nextButton = document.createElement("button");
-      nextButton.type = "button";
-      nextButton.className = "next-btn";
-      nextButton.textContent = rowIndex === rows.length - 1 ? "Finish →" : "Next →";
-      nextButton.addEventListener("click", () => advanceRow(rowIndex));
-      nextWrap.appendChild(nextButton);
-      body.appendChild(nextWrap);
 
-      group.appendChild(body);
-      grid.appendChild(group);
-      rowElements.push(group);
+      var nextBtn = document.createElement("button");
+      nextBtn.type = "button";
+      nextBtn.className = "next-btn";
+      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish \u2192" : "Next \u2192";
+      nextButtons[colIndex] = nextBtn;
+
+      (function(ci) {
+        nextBtn.addEventListener("click", function() {
+          if (selectedValues[ci] === null) return;
+          // Cancel any pending auto-advance timers for this column
+          var inputs = card.querySelectorAll("input[type='radio']");
+          inputs.forEach(function(inp) {
+            if (inp._cancelTimer) inp._cancelTimer();
+          });
+          advanceColumn(ci);
+        });
+      })(colIndex);
+
+      nextWrap.appendChild(nextBtn);
+      card.appendChild(nextWrap);
+
+      section.appendChild(collapsed);
+      section.appendChild(card);
+      container.appendChild(section);
+      columnElements.push(section);
     });
 
-    renderRows();
-
-    const slider = document.getElementById("red-line");
-    const indicator = document.getElementById("line-indicator");
-    const lineValue = document.getElementById("line-value");
-    const lineValueScreen = document.getElementById("line-value-screen");
-
-    function updateLine() {
-      const value = Number(slider.value);
-      indicator.style.setProperty("--line-position", `${100 - value}%`);
-      let label = "middle";
-      if (value >= HIGHER_THRESHOLD) label = "higher";
-      else if (value <= SLIDER_LOW_LABEL_THRESHOLD) label = "lower";
-      lineValue.textContent = label;
-      lineValueScreen.textContent = label;
-    }
-
-    slider.addEventListener("input", updateLine);
-    updateLine();
+    updateProgress();
   </script>
 </body>
 </html>
