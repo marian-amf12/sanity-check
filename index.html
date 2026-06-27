@@ -807,7 +807,7 @@
       <div class="title-wrap">
         <h1>Sanity Check</h1>
       </div>
-      <button class="print-button" type="button" onclick="window.print()">🖨 Print / Save as PDF</button>
+      <button class="print-button" type="button" aria-label="Print or save as PDF" onclick="window.print()">🖨 Print / Save as PDF</button>
     </header>
 
     <!-- Section 1: How it works -->
@@ -874,8 +874,8 @@
       <p class="small-note">Need more information about substances, harm reduction tips, support groups or specialised care? → <a href="https://chemsex.nl">chemsex.nl</a></p>
 
       <div id="completion-actions" class="completion-actions">
-        <button id="complete-button" class="action-button primary hidden" type="button">✓ Complete &amp; see full summary</button>
-        <button id="edit-button" class="action-button secondary hidden" type="button">Edit answers</button>
+        <button id="complete-button" class="action-button primary hidden" type="button" aria-label="Complete and see full summary">✓ Complete &amp; see full summary</button>
+        <button id="edit-button" class="action-button secondary hidden" type="button" aria-label="Edit answers">Edit answers</button>
       </div>
     </section>
 
@@ -907,8 +907,8 @@
         </div>
       </div>
       <div class="final-summary-actions">
-        <button id="copy-what-next" class="action-button ghost" type="button">📋 Copy 'What next?'</button>
-        <button id="final-print" class="action-button secondary" type="button">🖨 Print / Save as PDF</button>
+        <button id="copy-what-next" class="action-button ghost" type="button" aria-label="Copy What next text">📋 Copy 'What next?'</button>
+        <button id="final-print" class="action-button secondary" type="button" aria-label="Print or save as PDF">🖨 Print / Save as PDF</button>
       </div>
     </section>
 
@@ -1004,7 +1004,7 @@
         options: [
           "I'm also enjoying sober sex more now",
           "I'm also enjoying my sober life",
-          "I keep going for 2–3 days",
+          "I keep going for 2-3 days",
           "Low mood & low energy lasting several days",
           "All my closest friends engage in chemsex",
           "I refuse until I run out",
@@ -1038,6 +1038,7 @@
       "#e86830",
       "#d94040"
     ];
+    var dotGridGradientCounter = 0;
 
     // ── Gradient tint: top = cool (#f0f7f7), middle = white, bottom = warm (#fdf5f0) ──
     function getOptionTint(index, total) {
@@ -1059,7 +1060,7 @@
     }
 
     function getShortThemeLabel(theme) {
-      return theme.length > 12 ? theme.slice(0, 11).trimEnd() + "…" : theme;
+      return theme.length > 12 ? theme.slice(0, 9).trimEnd() + "..." : theme;
     }
 
     function allColumnsAnswered() {
@@ -1180,7 +1181,8 @@
 
       var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
       var gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
-      var gradientId = "grid-line-gradient-" + Math.random().toString(36).slice(2);
+      dotGridGradientCounter += 1;
+      var gradientId = "grid-line-gradient-" + dotGridGradientCounter;
       gradient.setAttribute("id", gradientId);
       gradient.setAttribute("gradientUnits", "userSpaceOnUse");
       gradient.setAttribute("x1", points[0].x);
@@ -1505,7 +1507,8 @@
       var nextBtn = document.createElement("button");
       nextBtn.type = "button";
       nextBtn.className = "next-btn";
-      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish →" : "Next →";
+      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish" : "Next";
+      nextBtn.setAttribute("aria-label", colIndex === columns.length - 1 ? "Finish this theme" : "Go to the next theme");
       nextButtons[colIndex] = nextBtn;
 
       (function(index) {
