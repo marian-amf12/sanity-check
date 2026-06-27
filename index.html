@@ -667,6 +667,7 @@
     // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
     const HIGHER_THRESHOLD = 70;
     const LINE_LOWER_THRESHOLD = 30;
+    // Keep both legacy thresholds aligned: first four options (indices 0-3) are positive.
     const POSITIVE_LIMIT = Math.min(POSITIVE_CELL_COUNT, LOWER_THRESHOLD);
 
     let activeRowIndex = 0;
@@ -688,6 +689,10 @@
       renderRows();
     }
 
+    function isFirstPassActiveRow(rowIndex) {
+      return rowIndex === activeRowIndex && rowIndex === furthestUnlockedRow;
+    }
+
     function renderRows() {
       rowElements.forEach((group, rowIndex) => {
         const count = selectedCount(rowIndex);
@@ -701,7 +706,8 @@
 
         group.classList.toggle("future", isFuture);
         group.classList.toggle("active", isActive);
-        toggle.hidden = !isCompleted || isActive;
+        toggle.hidden = !isCompleted;
+        toggle.textContent = isActive ? "Collapse" : "Expand / edit";
       });
       setWhatNextVisibility();
     }
@@ -728,7 +734,11 @@
       toggle.textContent = "Expand / edit";
       toggle.hidden = true;
       toggle.addEventListener("click", () => {
-        activeRowIndex = rowIndex;
+        if (activeRowIndex === rowIndex) {
+          activeRowIndex = Math.min(furthestUnlockedRow, rows.length);
+        } else {
+          activeRowIndex = rowIndex;
+        }
         renderRows();
       });
 
@@ -759,7 +769,7 @@
         input.value = item;
         input.addEventListener("change", () => {
           // Auto-advance only on first pass through the flow; completed rows stay editable without forcing a jump.
-          if (rowIndex === activeRowIndex && rowIndex === furthestUnlockedRow && selectedCount(rowIndex) > 0) {
+          if (isFirstPassActiveRow(rowIndex) && selectedCount(rowIndex) > 0) {
             advanceRow(rowIndex);
             return;
           }
