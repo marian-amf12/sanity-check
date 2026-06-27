@@ -637,6 +637,9 @@
     ];
 
     const grid = document.getElementById("grid");
+    const POSITIVE_CELL_COUNT = 4;
+    const HIGHER_THRESHOLD = 70;
+    const LOWER_THRESHOLD = 30;
 
     rows.forEach((row, rowIndex) => {
       const group = document.createElement("section");
@@ -658,7 +661,7 @@
 
       row.cells.forEach((item, itemIndex) => {
         const label = document.createElement("label");
-        label.className = `choice ${itemIndex < 4 ? "positive" : "negative"}`;
+        label.className = `choice ${itemIndex < POSITIVE_CELL_COUNT ? "positive" : "negative"}`;
 
         const input = document.createElement("input");
         input.type = "checkbox";
@@ -687,8 +690,8 @@
       const value = Number(slider.value);
       indicator.style.setProperty("--line-position", `${100 - value}%`);
       let label = "middle";
-      if (value >= 70) label = "higher";
-      else if (value <= 30) label = "lower";
+      if (value >= HIGHER_THRESHOLD) label = "higher";
+      else if (value <= LOWER_THRESHOLD) label = "lower";
       lineValue.textContent = label;
       lineValueScreen.textContent = label;
     }
