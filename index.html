@@ -740,8 +740,11 @@
       }
     ];
 
+    var AUTO_ADVANCE_DELAY_MS = 400;
+
     // ── Gradient tint: top = cool (#f0f7f7), middle = white, bottom = warm (#fdf5f0) ──
     function getOptionTint(index, total) {
+      if (total <= 1) return "rgb(255,255,255)";
       var t = index / (total - 1); // 0 → 1
       var r, g, b;
       if (t <= 0.5) {
@@ -952,16 +955,11 @@
             // Auto-advance only on first pass (not when editing a completed column)
             if (ci >= furthestCompleted) {
               clearTimeout(autoTimer);
-              autoTimer = setTimeout(function() { advanceColumn(ci); }, 400);
+              autoTimer = setTimeout(function() { advanceColumn(ci); }, AUTO_ADVANCE_DELAY_MS);
             }
           });
 
-          // Store timer ref on the next button so click handler can cancel it
-          if (!nextButtons[ci]) {
-            // Will be set after nextBtn is created; patch in below
-          }
-
-          // Expose cancel function via dataset trick
+          // Expose cancel function so the Next button click handler can abort auto-advance
           input._cancelTimer = function() { clearTimeout(autoTimer); };
         })(colIndex, option);
       });
