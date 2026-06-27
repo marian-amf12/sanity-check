@@ -36,17 +36,19 @@
     a { color: var(--accent); }
 
     .page {
-      max-width: 1440px;
+      max-width: 780px;
       margin: 0 auto;
       padding: 24px;
     }
 
     .header {
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
       gap: 24px;
       margin-bottom: 24px;
+      text-align: center;
     }
 
     .title-wrap h1 {
@@ -83,12 +85,7 @@
       color: var(--muted);
     }
 
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(240px, 0.9fr) minmax(0, 2.1fr) minmax(260px, 1fr);
-      gap: 20px;
-      align-items: start;
-    }
+    .layout { display: grid; gap: 20px; }
 
     .panel {
       background: rgba(255, 255, 255, 0.88);
@@ -122,10 +119,7 @@
       padding-left: 20px;
     }
 
-    .grid-wrap {
-      display: grid;
-      gap: 14px;
-    }
+    .grid-wrap { display: grid; gap: 14px; }
 
     .row-group {
       background: var(--panel-alt);
@@ -134,56 +128,63 @@
       padding: 16px;
     }
 
-    .row-header {
+    .row-group.future {
+      display: none;
+    }
+
+    .row-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
-      margin-bottom: 12px;
+      gap: 12px;
     }
 
-    .row-name {
+    .row-title {
       margin: 0;
-      font-size: 0.95rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent);
+      font-size: 1.03rem;
+      color: var(--text);
     }
 
-    .row-labels {
-      display: flex;
-      gap: 8px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .row-summary {
+      color: var(--muted);
+      font-size: 0.86rem;
+      white-space: nowrap;
     }
 
-    .pill {
-      padding: 6px 10px;
+    .row-toggle {
+      border: 1px solid var(--border);
       border-radius: 999px;
+      background: #fff;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.82rem;
+      padding: 6px 12px;
+      cursor: pointer;
     }
 
-    .pill.positive {
-      background: var(--positive);
-      color: #215d2d;
+    .row-body {
+      margin-top: 12px;
+      display: none;
     }
 
-    .pill.negative {
-      background: var(--negative);
-      color: #8a3131;
+    .row-group.active .row-body {
+      display: block;
     }
 
-    .cards {
+    .progress-note {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin: 0 0 10px;
+    }
+
+    .choices-stack {
       display: grid;
-      grid-template-columns: repeat(8, minmax(0, 1fr));
       gap: 10px;
     }
 
     .choice {
       position: relative;
       display: block;
-      min-height: 100%;
     }
 
     .choice input {
@@ -197,7 +198,6 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      min-height: 100%;
       border-radius: 16px;
       border: 1px solid var(--border);
       padding: 14px 12px;
@@ -205,6 +205,7 @@
       line-height: 1.35;
       cursor: pointer;
       transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+      width: 100%;
     }
 
     .choice-text::before {
@@ -244,6 +245,30 @@
       border-color: var(--accent);
       box-shadow: inset 0 0 0 3px #fff;
       opacity: 1;
+    }
+
+    .next-wrap {
+      margin-top: 12px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .next-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 16px;
+      background: var(--accent);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .what-next {
+      display: none;
+    }
+
+    .what-next.visible {
+      display: block;
     }
 
     .extras {
@@ -388,15 +413,9 @@
       display: inline;
     }
 
-    @media (max-width: 1180px) {
-      .layout { grid-template-columns: 1fr; }
-      .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-
     @media (max-width: 760px) {
       .page { padding: 16px; }
-      .header { flex-direction: column; }
-      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .row-top { flex-wrap: wrap; }
       .extras { grid-template-columns: 1fr; }
       .slider-wrap { grid-template-columns: 1fr; }
       .range-label { max-width: none; }
@@ -434,11 +453,6 @@
         background: #fff;
       }
 
-      .layout {
-        grid-template-columns: 26% 46% 28%;
-        gap: 8mm;
-      }
-
       .panel,
       .row-group,
       .divider-card,
@@ -462,10 +476,6 @@
       .info-box,
       .privacy-note {
         border-color: #9ca3af !important;
-      }
-
-      .cards {
-        gap: 4px;
       }
 
       .choice-text {
@@ -514,6 +524,20 @@
         display: none !important;
       }
 
+      .row-group.future,
+      .what-next {
+        display: block !important;
+      }
+
+      .row-body {
+        display: block !important;
+      }
+
+      .row-toggle,
+      .next-wrap {
+        display: none !important;
+      }
+
       .footer {
         margin-top: 8mm;
         font-size: 8.5pt;
@@ -551,8 +575,20 @@
 
       <section class="panel">
         <h2>Where you're at</h2>
+        <p class="small-note">Choose what fits for each row, then move to the next one.</p>
         <div id="grid" class="grid-wrap"></div>
+      </section>
 
+      <section id="what-next" class="panel what-next">
+        <h2>What next?</h2>
+        <div>
+          <label class="field-label" for="goal">My Sanity Check goal:</label>
+          <textarea class="textarea" id="goal" placeholder="e.g. more self control / less frequent sessions / abstinence"></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="commitment">Today/from now on, I will:</label>
+          <textarea class="textarea" id="commitment" placeholder="e.g. quit my most problematic substance, go home at dawn, make other plans for this weekend, book a counseling session, delete certain apps/contacts..."></textarea>
+        </div>
         <div class="extras">
           <div>
             <label class="field-label" for="extra-positive">Additional positive effects:</label>
@@ -596,19 +632,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section class="panel">
-        <h2>What next?</h2>
-        <div>
-          <label class="field-label" for="goal">My Sanity Check goal:</label>
-          <textarea class="textarea" id="goal" placeholder="e.g. more self control / less frequent sessions / abstinence"></textarea>
-        </div>
-        <div>
-          <label class="field-label" for="commitment">Today/from now on, I will:</label>
-          <textarea class="textarea" id="commitment" placeholder="e.g. quit my most problematic substance, go home at dawn, make other plans for this weekend, book a counseling session, delete certain apps/contacts..."></textarea>
-        </div>
-
         <div class="info-box">
           Want to talk about it? At GGD Amsterdam chemsex counseling we're happy to discuss any thoughts and feelings you have about your sex life and your substance use.
         </div>
@@ -620,7 +643,7 @@
 
     <footer class="footer">
       <span>Inspired by the Chemsex Check format. <a href="original.html">View the original reference page</a>.</span>
-      <span>CheckPoint BLN</span>
+      <span>Sanity Check Form test 2026</span>
     </footer>
   </div>
 
@@ -637,39 +660,129 @@
     ];
 
     const grid = document.getElementById("grid");
+    const whatNext = document.getElementById("what-next");
     // In the original paper grid, the first four cells in each row are the more positive/steadying experiences.
     const POSITIVE_CELL_COUNT = 4;
+    const LOWER_THRESHOLD = POSITIVE_CELL_COUNT;
+    const ALL_ROWS_COMPLETE_INDEX = rows.length;
+    const NO_ACTIVE_ROW = -1;
     // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
     const HIGHER_THRESHOLD = 70;
-    const LOWER_THRESHOLD = 30;
+    const SLIDER_LOW_LABEL_THRESHOLD = 30;
+
+    let activeRowIndex = 0;
+    let furthestUnlockedRow = 0;
+    const rowElements = [];
+    const rowInputs = rows.map(() => []);
+
+    function isPositiveChoice(itemIndex) {
+      // Required mapping: items 0-3 are positive, items 4-7 are negative.
+      return itemIndex < LOWER_THRESHOLD;
+    }
+
+    function selectedCount(rowIndex) {
+      return rowInputs[rowIndex].filter((input) => input.checked).length;
+    }
+
+    function setWhatNextVisibility() {
+      whatNext.classList.toggle("visible", furthestUnlockedRow >= ALL_ROWS_COMPLETE_INDEX);
+    }
+
+    function advanceRow(rowIndex) {
+      furthestUnlockedRow = Math.max(furthestUnlockedRow, rowIndex + 1);
+      const nextRowIndex = rowIndex + 1;
+      if (nextRowIndex >= ALL_ROWS_COMPLETE_INDEX) activeRowIndex = NO_ACTIVE_ROW;
+      else activeRowIndex = nextRowIndex;
+      renderRows();
+    }
+
+    function isFirstPassActiveRow(rowIndex) {
+      return rowIndex === activeRowIndex && rowIndex === furthestUnlockedRow;
+    }
+
+    function renderRows() {
+      rowElements.forEach((group, rowIndex) => {
+        const count = selectedCount(rowIndex);
+        const summary = group.querySelector(".row-summary");
+        const toggle = group.querySelector(".row-toggle");
+        summary.textContent = `${count} selected`;
+
+        const isFuture = rowIndex > furthestUnlockedRow;
+        const isActive = rowIndex === activeRowIndex;
+        const isCompleted = rowIndex < furthestUnlockedRow;
+
+        group.classList.toggle("future", isFuture);
+        group.classList.toggle("active", isActive);
+        toggle.hidden = !isCompleted;
+        toggle.textContent = group.classList.contains("active") ? "Collapse" : "Expand / edit";
+      });
+      setWhatNextVisibility();
+    }
 
     rows.forEach((row, rowIndex) => {
-      const rowLabel = row[0];
       const group = document.createElement("section");
       group.className = "row-group";
+      group.setAttribute("data-row-index", rowIndex);
 
-      const header = document.createElement("div");
-      header.className = "row-header";
-      header.innerHTML = `
-        <h3 class="row-name">${rowLabel}</h3>
-        <div class="row-labels">
-          <span class="pill positive">positive</span>
-          <span class="pill negative">negative</span>
-        </div>
-      `;
-      group.appendChild(header);
+      const top = document.createElement("div");
+      top.className = "row-top";
 
-      const cards = document.createElement("div");
-      cards.className = "cards";
+      const title = document.createElement("h3");
+      title.className = "row-title";
+      title.textContent = row[0];
+
+      const summary = document.createElement("span");
+      summary.className = "row-summary";
+      summary.textContent = "0 selected";
+
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = "row-toggle";
+      toggle.textContent = "Expand / edit";
+      toggle.hidden = true;
+      toggle.addEventListener("click", () => {
+        if (activeRowIndex === rowIndex) {
+          activeRowIndex = NO_ACTIVE_ROW;
+        } else {
+          activeRowIndex = rowIndex;
+        }
+        renderRows();
+      });
+
+      top.appendChild(title);
+      top.appendChild(summary);
+      top.appendChild(toggle);
+      group.appendChild(top);
+
+      const body = document.createElement("div");
+      body.className = "row-body";
+
+      const progress = document.createElement("p");
+      progress.className = "progress-note";
+      progress.textContent = `Row ${rowIndex + 1} of ${rows.length}`;
+      body.appendChild(progress);
+
+      const options = document.createElement("div");
+      options.className = "choices-stack";
 
       row.forEach((item, itemIndex) => {
         const label = document.createElement("label");
-        label.className = `choice ${itemIndex < POSITIVE_CELL_COUNT ? "positive" : "negative"}`;
+        label.className = `choice ${isPositiveChoice(itemIndex) ? "positive" : "negative"}`;
+        label.setAttribute("data-row-index", rowIndex);
 
         const input = document.createElement("input");
         input.type = "checkbox";
         input.name = `experience-${rowIndex}-${itemIndex}`;
         input.value = item;
+        rowInputs[rowIndex].push(input);
+        input.addEventListener("change", () => {
+          // Auto-advance only on first pass through the flow; completed rows stay editable without forcing a jump.
+          if (isFirstPassActiveRow(rowIndex) && selectedCount(rowIndex) > 0) {
+            advanceRow(rowIndex);
+            return;
+          }
+          renderRows();
+        });
 
         const text = document.createElement("span");
         text.className = "choice-text";
@@ -677,12 +790,27 @@
 
         label.appendChild(input);
         label.appendChild(text);
-        cards.appendChild(label);
+        options.appendChild(label);
       });
 
-      group.appendChild(cards);
+      body.appendChild(options);
+
+      const nextWrap = document.createElement("div");
+      nextWrap.className = "next-wrap";
+      const nextButton = document.createElement("button");
+      nextButton.type = "button";
+      nextButton.className = "next-btn";
+      nextButton.textContent = rowIndex === rows.length - 1 ? "Finish →" : "Next →";
+      nextButton.addEventListener("click", () => advanceRow(rowIndex));
+      nextWrap.appendChild(nextButton);
+      body.appendChild(nextWrap);
+
+      group.appendChild(body);
       grid.appendChild(group);
+      rowElements.push(group);
     });
+
+    renderRows();
 
     const slider = document.getElementById("red-line");
     const indicator = document.getElementById("line-indicator");
@@ -694,7 +822,7 @@
       indicator.style.setProperty("--line-position", `${100 - value}%`);
       let label = "middle";
       if (value >= HIGHER_THRESHOLD) label = "higher";
-      else if (value <= LOWER_THRESHOLD) label = "lower";
+      else if (value <= SLIDER_LOW_LABEL_THRESHOLD) label = "lower";
       lineValue.textContent = label;
       lineValueScreen.textContent = label;
     }
