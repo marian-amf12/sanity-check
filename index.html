@@ -13,6 +13,8 @@
       --muted: #5e7780;
       --border: #cfe0e4;
       --accent: #2f7f82;
+      --accent-dark: #235c6a;
+      --accent-gradient: linear-gradient(135deg, #2f7f82 0%, #235c6a 100%);
       --accent-soft: #d8eff0;
       --readonly-bg: #eef3f4;
       --print-mark: #1e293b;
@@ -61,7 +63,7 @@
       border: 0;
       border-radius: 999px;
       padding: 12px 20px;
-      background: linear-gradient(135deg, #2f7f82 0%, #235c6a 100%);
+      background: var(--accent-gradient);
       color: #fff;
       font-size: 0.9rem;
       font-weight: 700;
@@ -597,7 +599,7 @@
     }
 
     .action-button.primary {
-      background: linear-gradient(135deg, #2f7f82 0%, #235c6a 100%);
+      background: var(--accent-gradient);
       color: #fff;
       box-shadow: var(--shadow-sm);
     }
@@ -1507,7 +1509,7 @@
       var nextBtn = document.createElement("button");
       nextBtn.type = "button";
       nextBtn.className = "next-btn";
-      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish" : "Next";
+      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish →" : "Next →";
       nextBtn.setAttribute("aria-label", colIndex === columns.length - 1 ? "Finish this theme" : "Go to the next theme");
       nextButtons[colIndex] = nextBtn;
 
