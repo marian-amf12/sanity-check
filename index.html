@@ -626,14 +626,14 @@
 
   <script>
     const rows = [
-      { label: "adventure", cells: ["adventure", "relief from shame and inhibitions", "sex is more enjoyable than ever", "self-confidence boost", "I feel like part of a community", "meaningful new friendship or relationship", "I'm also enjoying sober sex more now", "It's less important for me than it used to be"] },
-      { label: "fun", cells: ["fun", "intimacy", "I am in good, caring company", "I generally stick to my plans and boundaries", "It generally leaves me feeling satisfied", "I have a fulfilling sex life", "I'm also enjoying my sober life", "the amount of chemsex in my life is stable"] },
-      { label: "I spend a lot of time looking for it", cells: ["I spend a lot of time looking for it", "frequent bacterial STIs", "I've neglected some former hobbies", "I'm seeing old friends less", "sex acts that I'm not really into sober", "situations that I later regret", "I keep going for 2–3 days", "It's getting more prominent in my life"] },
-      { label: "GBL/GHB more than once a week", cells: ["GBL/GHB more than once a week", "Mephedrone or 3-MMC more than once a month", "I forget my PrEP or HIV meds now & then", "I worry for some of the people I encounter", "I meet some people because they share drugs", "It's affecting my looks", "low mood & low energy lasting several days", "I feel ashamed of my chemsex"] },
-      { label: "I take G without exact dosing and timing", cells: ["I take G without exact dosing and timing", "I share straws or pipes", "Tina or Monkey Dust regularly", "It's affecting my relationship with my partner", "I need a higher dose than I used to", "I don't have sober sex", "all my closest friends engage in chemsex", "I want to make a change"] },
-      { label: "I'm not protecting myself against HIV", cells: ["I'm not protecting myself against HIV", "I forget my PrEP or HIV meds regularly", "I inject (slam)", "chemsex (just about) every weekend", "my focus has shifted from sex to being high", "I also use alone", "I refuse until I run out", "I've tried to make changes but failed"] },
-      { label: "I combine G + alcohol", cells: ["I combine G + alcohol", "I'm not sure everything was consensual", "I share needles or injecting equipment", "I've missed days at work/uni", "problems with sleep/irritability/anxiety", "I can't stop thinking about it", "episodes of paranoia, hallucinations", "I use GBL/GHB 24/7"] },
-      { label: "I combine poppers + Viagra", cells: ["I combine poppers + Viagra", "I've overdosed on G", "I've overdosed on G several times", "I've needed emergency medical attention", "violations of consent", "I was newly diagnosed with HIV", "lost my job/dropped out of school", "suicidal thoughts"] }
+      { label: "adventure", cells: ["relief from shame and inhibitions", "sex is more enjoyable than ever", "self-confidence boost", "I feel like part of a community", "meaningful new friendship or relationship", "I'm also enjoying sober sex more now", "It's less important for me than it used to be"] },
+      { label: "fun", cells: ["intimacy", "I am in good, caring company", "I generally stick to my plans and boundaries", "It generally leaves me feeling satisfied", "I have a fulfilling sex life", "I'm also enjoying my sober life", "the amount of chemsex in my life is stable"] },
+      { label: "I spend a lot of time looking for it", cells: ["frequent bacterial STIs", "I've neglected some former hobbies", "I'm seeing old friends less", "sex acts that I'm not really into sober", "situations that I later regret", "I keep going for 2–3 days", "It's getting more prominent in my life"] },
+      { label: "GBL/GHB more than once a week", cells: ["Mephedrone or 3-MMC more than once a month", "I forget my PrEP or HIV meds now & then", "I worry for some of the people I encounter", "I meet some people because they share drugs", "It's affecting my looks", "low mood & low energy lasting several days", "I feel ashamed of my chemsex"] },
+      { label: "I take G without exact dosing and timing", cells: ["I share straws or pipes", "Tina or Monkey Dust regularly", "It's affecting my relationship with my partner", "I need a higher dose than I used to", "I don't have sober sex", "all my closest friends engage in chemsex", "I want to make a change"] },
+      { label: "I'm not protecting myself against HIV", cells: ["I forget my PrEP or HIV meds regularly", "I inject (slam)", "chemsex (just about) every weekend", "my focus has shifted from sex to being high", "I also use alone", "I refuse until I run out", "I've tried to make changes but failed"] },
+      { label: "I combine G + alcohol", cells: ["I'm not sure everything was consensual", "I share needles or injecting equipment", "I've missed days at work/uni", "problems with sleep/irritability/anxiety", "I can't stop thinking about it", "episodes of paranoia, hallucinations", "I use GBL/GHB 24/7"] },
+      { label: "I combine poppers + Viagra", cells: ["I've overdosed on G", "I've overdosed on G several times", "I've needed emergency medical attention", "violations of consent", "I was newly diagnosed with HIV", "lost my job/dropped out of school", "suicidal thoughts"] }
     ];
 
     const grid = document.getElementById("grid");
@@ -661,7 +661,8 @@
       const cards = document.createElement("div");
       cards.className = "cards";
 
-      row.cells.forEach((item, itemIndex) => {
+      const allItems = [row.label, ...row.cells];
+      allItems.forEach((item, itemIndex) => {
         const label = document.createElement("label");
         label.className = `choice ${itemIndex < POSITIVE_CELL_COUNT ? "positive" : "negative"}`;
 
