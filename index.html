@@ -13,7 +13,10 @@
       --muted: #5e7780;
       --border: #cfe0e4;
       --accent: #2f7f82;
+      --accent-dark: #235c6a;
+      --accent-gradient: linear-gradient(135deg, #2f7f82 0%, #235c6a 100%);
       --accent-soft: #d8eff0;
+      --readonly-bg: #eef3f4;
       --print-mark: #1e293b;
       --shadow: 0 20px 45px rgba(25, 60, 72, 0.08);
       --shadow-sm: 0 4px 14px rgba(25, 60, 72, 0.05);
@@ -60,7 +63,7 @@
       border: 0;
       border-radius: 999px;
       padding: 12px 20px;
-      background: linear-gradient(135deg, var(--accent), #235c6a);
+      background: var(--accent-gradient);
       color: #fff;
       font-size: 0.9rem;
       font-weight: 700;
@@ -82,7 +85,6 @@
       border-radius: 24px;
       padding: 26px 28px;
       box-shadow: var(--shadow);
-      backdrop-filter: blur(4px);
       margin-bottom: 20px;
     }
 
@@ -363,6 +365,130 @@
       display: block;
     }
 
+    .dot-grid-shell {
+      margin-top: 18px;
+    }
+
+    .dot-grid-scroll {
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 4px 2px 14px;
+    }
+
+    .dot-grid-stage {
+      position: relative;
+      width: fit-content;
+      min-width: 100%;
+      margin: 0 auto;
+      padding: 0 12px 8px;
+    }
+
+    .dot-grid-columns {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      width: fit-content;
+      margin: 0 auto;
+      padding-top: 16px;
+    }
+
+    .dot-grid-column {
+      width: 52px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .dot-grid-label {
+      display: block;
+      width: 52px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      letter-spacing: 0.02em;
+    }
+
+    .dot-grid-dots {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 4px 0;
+    }
+
+    .grid-dot {
+      position: relative;
+      width: 8px;
+      height: 8px;
+      border: 0;
+      border-radius: 50%;
+      padding: 0;
+      cursor: default;
+      background: var(--dot-color);
+      opacity: 0.25;
+      transition: transform 0.18s ease, opacity 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .grid-dot.is-selected {
+      width: 14px;
+      height: 14px;
+      opacity: 1;
+      box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--dot-color), 0 5px 14px rgba(24, 51, 58, 0.22);
+    }
+
+    .grid-dot:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 4px;
+    }
+
+    .dot-grid-line {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .dot-grid-line path {
+      fill: none;
+      stroke-width: 2.5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.85;
+    }
+
+    .dot-tooltip {
+      position: absolute;
+      z-index: 3;
+      max-width: 200px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      font-size: 0.82rem;
+      line-height: 1.35;
+      box-shadow: var(--shadow-sm);
+      pointer-events: none;
+      opacity: 0;
+      transform: translate(-50%, -6px);
+      transition: opacity 0.14s ease;
+    }
+
+    .dot-tooltip.visible {
+      opacity: 1;
+    }
+
     .summary-list {
       display: flex;
       flex-direction: column;
@@ -371,9 +497,10 @@
     }
 
     .summary-item {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
+      display: grid;
+      grid-template-columns: minmax(120px, 180px) minmax(0, 1fr);
+      gap: 8px 16px;
+      align-items: start;
       padding: 13px 16px;
       background: var(--panel-alt);
       border-radius: 14px;
@@ -381,17 +508,15 @@
     }
 
     .summary-item-theme {
-      font-size: 0.76rem;
+      font-size: 0.83rem;
       font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
+      color: var(--accent);
     }
 
     .summary-item-answer {
       font-size: 0.97rem;
-      color: var(--text);
-      font-weight: 500;
+      color: var(--muted);
+      font-weight: 400;
       line-height: 1.4;
     }
 
@@ -435,11 +560,109 @@
       resize: vertical;
     }
 
+    .textarea[readonly],
+    .text-input[readonly] {
+      background: var(--readonly-bg);
+      color: var(--muted);
+    }
+
     .prompt-list {
       display: flex;
       flex-direction: column;
       gap: 14px;
       margin-top: 20px;
+    }
+
+    .completion-actions {
+      display: none;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .completion-actions.visible {
+      display: flex;
+    }
+
+    .action-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 22px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+    .action-button:hover {
+      transform: translateY(-1px);
+    }
+
+    .action-button.primary {
+      background: var(--accent-gradient);
+      color: #fff;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .action-button.secondary {
+      background: #fff;
+      color: var(--accent);
+      border: 1px solid var(--border);
+    }
+
+    .action-button.ghost {
+      background: var(--panel-alt);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .action-button.hidden {
+      display: none;
+    }
+
+    .final-summary {
+      display: none;
+    }
+
+    .final-summary.visible {
+      display: block;
+    }
+
+    .summary-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 22px 0;
+    }
+
+    .final-summary-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .readonly-block-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .readonly-block {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: var(--panel-alt);
+      padding: 14px 15px;
+      color: var(--muted);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .final-summary-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 22px;
     }
 
     /* ── Info box ── */
@@ -472,6 +695,19 @@
       .column-card { padding: 18px 16px 14px; }
       .column-collapsed { flex-wrap: wrap; }
       .collapsed-answer { white-space: normal; text-overflow: unset; }
+      .dot-grid-scroll { -webkit-overflow-scrolling: touch; }
+      .dot-grid-stage {
+        min-width: max-content;
+        margin: 0;
+      }
+      .summary-item {
+        grid-template-columns: 1fr;
+        gap: 4px;
+      }
+      .completion-actions,
+      .final-summary-actions {
+        flex-direction: column;
+      }
       .footer { flex-direction: column; }
     }
 
@@ -498,7 +734,7 @@
         padding: 0;
       }
 
-      .print-button { display: none !important; }
+      button { display: none !important; }
       .progress-bar-wrap { display: none !important; }
       .next-wrap { display: none !important; }
 
@@ -508,16 +744,17 @@
       .column-collapsed { display: none !important; }
       .summary-section { display: block !important; }
       .what-next { display: block !important; }
+      .final-summary.visible { display: block !important; }
 
       .panel,
       .column-card,
       .info-box,
       .summary-item,
+      .readonly-block,
       .textarea,
       .text-input {
         box-shadow: none !important;
         background: #fff !important;
-        backdrop-filter: none !important;
         border-color: #9ca3af !important;
       }
 
@@ -544,6 +781,19 @@
         box-shadow: none !important;
       }
 
+      .grid-dot {
+        opacity: 0.55 !important;
+      }
+
+      .grid-dot.is-selected {
+        opacity: 1 !important;
+        box-shadow: 0 0 0 1px #fff, 0 0 0 2px currentColor !important;
+      }
+
+      .dot-grid-line path {
+        opacity: 1 !important;
+      }
+
       .footer {
         margin-top: 8mm;
         font-size: 8.5pt;
@@ -559,7 +809,7 @@
       <div class="title-wrap">
         <h1>Sanity Check</h1>
       </div>
-      <button class="print-button" type="button" onclick="window.print()">🖨 Print / Save as PDF</button>
+      <button class="print-button" type="button" aria-label="Print or save as PDF" onclick="window.print()">🖨 Print / Save as PDF</button>
     </header>
 
     <!-- Section 1: How it works -->
@@ -583,8 +833,9 @@
 
     <!-- Section 3: Summary (auto-shown after all 8 answered) -->
     <section id="summary-section" class="panel summary-section">
-      <h2>Here's what you said</h2>
-      <p class="small-note">In connection with chemsex, I said I'm experiencing:</p>
+      <h2>Here's where you are</h2>
+      <p class="small-note">A visual snapshot of the 8 themes you selected.</p>
+      <div id="summary-grid" class="dot-grid-shell"></div>
       <div id="summary-list" class="summary-list"></div>
     </section>
 
@@ -623,6 +874,44 @@
 
       <p style="margin-top:14px;"><a href="https://ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks">ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks</a></p>
       <p class="small-note">Need more information about substances, harm reduction tips, support groups or specialised care? → <a href="https://chemsex.nl">chemsex.nl</a></p>
+
+      <div id="completion-actions" class="completion-actions">
+        <button id="complete-button" class="action-button primary hidden" type="button" aria-label="Complete and see full summary">✓ Complete &amp; see full summary</button>
+        <button id="edit-button" class="action-button secondary hidden" type="button" aria-label="Edit answers">Edit answers</button>
+      </div>
+    </section>
+
+    <section id="final-summary" class="panel final-summary">
+      <h2>Your Sanity Check summary</h2>
+      <div id="final-summary-grid" class="dot-grid-shell"></div>
+      <div id="final-summary-list" class="summary-list"></div>
+      <div class="summary-divider"></div>
+      <div class="final-summary-fields">
+        <div>
+          <span class="readonly-block-label">My goal:</span>
+          <div id="final-goal" class="readonly-block"></div>
+        </div>
+        <div>
+          <span class="readonly-block-label">I will:</span>
+          <div id="final-commitment" class="readonly-block"></div>
+        </div>
+        <div>
+          <span class="readonly-block-label">My strategies:</span>
+          <div id="final-strategies" class="readonly-block"></div>
+        </div>
+        <div>
+          <span class="readonly-block-label">Issues to address:</span>
+          <div id="final-issues" class="readonly-block"></div>
+        </div>
+        <div>
+          <span class="readonly-block-label">Partners who share my boundaries:</span>
+          <div id="final-partners" class="readonly-block"></div>
+        </div>
+      </div>
+      <div class="final-summary-actions">
+        <button id="copy-what-next" class="action-button ghost" type="button" aria-label="Copy What next text">📋 Copy 'What next?'</button>
+        <button id="final-print" class="action-button secondary" type="button" aria-label="Print or save as PDF">🖨 Print / Save as PDF</button>
+      </div>
     </section>
 
     <footer class="footer">
@@ -637,8 +926,8 @@
       {
         theme: "Adventure & excitement",
         options: [
-          "adventure",
-          "fun",
+          "Adventure",
+          "Fun",
           "I spend a lot of time looking for it",
           "GBL/GHB more than once a week",
           "I take G without exact dosing and timing",
@@ -650,9 +939,9 @@
       {
         theme: "Connection & social life",
         options: [
-          "relief from shame and inhibitions",
-          "intimacy",
-          "frequent bacterial STIs",
+          "Relief from shame and inhibitions",
+          "Intimacy",
+          "Frequent bacterial STIs",
           "Mephedrone or 3-MMC more than once a month",
           "I share straws or pipes",
           "I forget my PrEP or HIV meds regularly",
@@ -663,7 +952,7 @@
       {
         theme: "Enjoyment & experience",
         options: [
-          "sex is more enjoyable than ever",
+          "Sex is more enjoyable than ever",
           "I am in good, caring company",
           "I've neglected some former hobbies",
           "I forget my PrEP or HIV meds now & then",
@@ -676,12 +965,12 @@
       {
         theme: "Plans & boundaries",
         options: [
-          "self-confidence boost",
+          "Self-confidence boost",
           "I generally stick to my plans and boundaries",
           "I'm seeing old friends less",
           "I worry for some of the people I encounter",
           "It's affecting my relationship with my partner",
-          "chemsex (just about) every weekend",
+          "Chemsex (just about) every weekend",
           "I've missed days at work/uni",
           "I've needed emergency medical attention"
         ]
@@ -691,20 +980,20 @@
         options: [
           "I feel like part of a community",
           "It generally leaves me feeling satisfied",
-          "sex acts that I'm not really into sober",
+          "Sex acts that I'm not really into sober",
           "I meet some people because they share drugs",
           "I need a higher dose than I used to",
-          "my focus has shifted from sex to being high",
-          "problems with sleep/irritability/anxiety",
-          "violations of consent"
+          "My focus has shifted from sex to being high",
+          "Problems with sleep/irritability/anxiety",
+          "Violations of consent"
         ]
       },
       {
         theme: "Relationships & sex life",
         options: [
-          "meaningful new friendship or relationship",
+          "Meaningful new friendship or relationship",
           "I have a fulfilling sex life",
-          "situations that I later regret",
+          "Situations that I later regret",
           "It's affecting my looks",
           "I don't have sober sex",
           "I also use alone",
@@ -717,35 +1006,46 @@
         options: [
           "I'm also enjoying sober sex more now",
           "I'm also enjoying my sober life",
-          "I keep going for 2\u20133 days",
-          "low mood & low energy lasting several days",
-          "all my closest friends engage in chemsex",
+          "I keep going for 2-3 days",
+          "Low mood & low energy lasting several days",
+          "All my closest friends engage in chemsex",
           "I refuse until I run out",
-          "episodes of paranoia, hallucinations",
-          "lost my job/dropped out of school"
+          "Episodes of paranoia, hallucinations",
+          "Lost my job/dropped out of school"
         ]
       },
       {
         theme: "Overall impact",
         options: [
           "It's less important for me than it used to be",
-          "the amount of chemsex in my life is stable",
+          "The amount of chemsex in my life is stable",
           "It's getting more prominent in my life",
           "I feel ashamed of my chemsex",
           "I want to make a change",
           "I've tried to make changes but failed",
           "I use GBL/GHB 24/7",
-          "suicidal thoughts"
+          "Suicidal thoughts"
         ]
       }
     ];
 
     var AUTO_ADVANCE_DELAY_MS = 400;
+    var DOT_ROW_COLORS = [
+      "#4caf85",
+      "#72bb7a",
+      "#9bc96e",
+      "#c4d465",
+      "#e8c54a",
+      "#f0a030",
+      "#e86830",
+      "#d94040"
+    ];
+    var dotGridGradientCounter = 0;
 
     // ── Gradient tint: top = cool (#f0f7f7), middle = white, bottom = warm (#fdf5f0) ──
     function getOptionTint(index, total) {
       if (total <= 1) return "rgb(255,255,255)";
-      var t = index / (total - 1); // 0 → 1
+      var t = index / (total - 1);
       var r, g, b;
       if (t <= 0.5) {
         var s = t / 0.5;
@@ -761,52 +1061,297 @@
       return "rgb(" + r + "," + g + "," + b + ")";
     }
 
+    function getShortThemeLabel(theme) {
+      return theme.length > 12 ? theme.slice(0, 9).trimEnd() + "..." : theme;
+    }
+
+    function allColumnsAnswered() {
+      return selectedValues.every(function(value) { return value !== null; });
+    }
+
+    function whatNextIsFilled() {
+      return whatNextFields.every(function(field) { return field.value.trim() !== ""; });
+    }
+
     // ── DOM references ──
-    var container     = document.getElementById("columns-container");
-    var progressBar   = document.getElementById("progress-bar");
+    var container = document.getElementById("columns-container");
+    var progressBar = document.getElementById("progress-bar");
     var summarySection = document.getElementById("summary-section");
-    var summaryList   = document.getElementById("summary-list");
-    var whatNext      = document.getElementById("what-next");
+    var summaryGrid = document.getElementById("summary-grid");
+    var summaryList = document.getElementById("summary-list");
+    var whatNext = document.getElementById("what-next");
+    var completionActions = document.getElementById("completion-actions");
+    var completeButton = document.getElementById("complete-button");
+    var editButton = document.getElementById("edit-button");
+    var finalSummary = document.getElementById("final-summary");
+    var finalSummaryGrid = document.getElementById("final-summary-grid");
+    var finalSummaryList = document.getElementById("final-summary-list");
+    var copyWhatNextButton = document.getElementById("copy-what-next");
+    var finalPrintButton = document.getElementById("final-print");
+    var goalField = document.getElementById("goal");
+    var commitmentField = document.getElementById("commitment");
+    var strategiesField = document.getElementById("strategies");
+    var issuesField = document.getElementById("issues");
+    var partnersField = document.getElementById("partners");
+    var whatNextFields = [goalField, commitmentField, strategiesField, issuesField, partnersField];
+    var finalFieldMap = {
+      goal: document.getElementById("final-goal"),
+      commitment: document.getElementById("final-commitment"),
+      strategies: document.getElementById("final-strategies"),
+      issues: document.getElementById("final-issues"),
+      partners: document.getElementById("final-partners")
+    };
 
     // ── State ──
-    var furthestCompleted = 0;            // number of columns completed (0 = none)
+    var furthestCompleted = 0;
     var selectedValues = new Array(columns.length).fill(null);
-    var columnElements = [];              // div.column-section per column
-    var nextButtons    = [];              // .next-btn per column
+    var selectedIndexes = new Array(columns.length).fill(null);
+    var columnElements = [];
+    var nextButtons = [];
+    var isFinalized = false;
 
     // ── Progress bar ──
     function updateProgress() {
-      var done = selectedValues.filter(function(v) { return v !== null; }).length;
+      var done = selectedValues.filter(function(value) { return value !== null; }).length;
       progressBar.style.width = ((done / columns.length) * 100) + "%";
     }
 
-    // ── Summary ──
-    function renderSummary() {
-      summaryList.innerHTML = "";
-      columns.forEach(function(col, i) {
-        if (selectedValues[i] === null) return;
-        var item = document.createElement("div");
-        item.className = "summary-item";
+    function createSummaryItem(col, answer) {
+      var item = document.createElement("div");
+      item.className = "summary-item";
 
-        var theme = document.createElement("span");
-        theme.className = "summary-item-theme";
-        theme.textContent = col.theme;
+      var theme = document.createElement("span");
+      theme.className = "summary-item-theme";
+      theme.textContent = col.theme;
 
-        var answer = document.createElement("span");
-        answer.className = "summary-item-answer";
-        answer.textContent = selectedValues[i];
+      var answerEl = document.createElement("span");
+      answerEl.className = "summary-item-answer";
+      answerEl.textContent = answer;
 
-        item.appendChild(theme);
-        item.appendChild(answer);
-        summaryList.appendChild(item);
+      item.appendChild(theme);
+      item.appendChild(answerEl);
+      return item;
+    }
+
+    function renderSummaryList(target) {
+      target.innerHTML = "";
+      columns.forEach(function(col, index) {
+        if (selectedValues[index] === null) return;
+        target.appendChild(createSummaryItem(col, selectedValues[index]));
       });
     }
 
+    function hideDotTooltip(stage) {
+      var tooltip = stage.querySelector(".dot-tooltip");
+      if (!tooltip) return;
+      tooltip.classList.remove("visible");
+      tooltip.textContent = "";
+    }
+
+    function showDotTooltip(stage, dot) {
+      var tooltip = stage.querySelector(".dot-tooltip");
+      if (!tooltip) return;
+
+      var stageRect = stage.getBoundingClientRect();
+      var dotRect = dot.getBoundingClientRect();
+      tooltip.textContent = dot.getAttribute("data-tooltip");
+      tooltip.style.left = (dotRect.left - stageRect.left + dotRect.width / 2) + "px";
+      tooltip.style.top = (dotRect.top - stageRect.top - 12) + "px";
+      tooltip.classList.add("visible");
+    }
+
+    function drawDotGridLine(stage, svg) {
+      var selectedDots = stage.querySelectorAll(".grid-dot.is-selected");
+      if (selectedDots.length !== columns.length) return;
+
+      var stageRect = stage.getBoundingClientRect();
+      var width = Math.ceil(stageRect.width);
+      var height = Math.ceil(stageRect.height);
+      svg.setAttribute("viewBox", "0 0 " + width + " " + height);
+      svg.setAttribute("width", width);
+      svg.setAttribute("height", height);
+      svg.innerHTML = "";
+
+      var points = Array.prototype.map.call(selectedDots, function(dot, index) {
+        var rect = dot.getBoundingClientRect();
+        return {
+          x: rect.left - stageRect.left + rect.width / 2,
+          y: rect.top - stageRect.top + rect.height / 2,
+          color: DOT_ROW_COLORS[selectedIndexes[index]]
+        };
+      });
+
+      var defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+      var gradient = document.createElementNS("http://www.w3.org/2000/svg", "linearGradient");
+      dotGridGradientCounter += 1;
+      var gradientId = "grid-line-gradient-" + dotGridGradientCounter;
+      gradient.setAttribute("id", gradientId);
+      gradient.setAttribute("gradientUnits", "userSpaceOnUse");
+      gradient.setAttribute("x1", points[0].x);
+      gradient.setAttribute("y1", points[0].y);
+      gradient.setAttribute("x2", points[points.length - 1].x);
+      gradient.setAttribute("y2", points[points.length - 1].y);
+
+      points.forEach(function(point, index) {
+        var stop = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop.setAttribute("offset", ((index / (points.length - 1)) * 100) + "%");
+        stop.setAttribute("stop-color", point.color);
+        gradient.appendChild(stop);
+      });
+
+      defs.appendChild(gradient);
+      svg.appendChild(defs);
+
+      var d = "M " + points[0].x + " " + points[0].y;
+      for (var index = 1; index < points.length; index += 1) {
+        var previous = points[index - 1];
+        var current = points[index];
+        var midpoint = (previous.x + current.x) / 2;
+        d += " C " + midpoint + " " + previous.y + ", " + midpoint + " " + current.y + ", " + current.x + " " + current.y;
+      }
+
+      var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("stroke", "url(#" + gradientId + ")");
+      svg.appendChild(path);
+
+      var length = path.getTotalLength();
+      path.style.strokeDasharray = length;
+      path.style.strokeDashoffset = length;
+      path.getBoundingClientRect();
+      path.style.transition = "stroke-dashoffset 0.8s ease";
+      path.style.strokeDashoffset = "0";
+    }
+
+    function renderDotGrid(target) {
+      target.innerHTML = "";
+      if (!allColumnsAnswered()) return;
+
+      var scroll = document.createElement("div");
+      scroll.className = "dot-grid-scroll";
+
+      var stage = document.createElement("div");
+      stage.className = "dot-grid-stage";
+
+      var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "dot-grid-line");
+      svg.setAttribute("aria-hidden", "true");
+
+      var columnsWrap = document.createElement("div");
+      columnsWrap.className = "dot-grid-columns";
+
+      columns.forEach(function(col, colIndex) {
+        var column = document.createElement("div");
+        column.className = "dot-grid-column";
+
+        var label = document.createElement("span");
+        label.className = "dot-grid-label";
+        label.textContent = getShortThemeLabel(col.theme);
+        label.title = col.theme;
+        column.appendChild(label);
+
+        var dots = document.createElement("div");
+        dots.className = "dot-grid-dots";
+
+        col.options.forEach(function(option, optIndex) {
+          var dot = document.createElement("button");
+          dot.type = "button";
+          dot.className = "grid-dot" + (selectedIndexes[colIndex] === optIndex ? " is-selected" : "");
+          dot.style.setProperty("--dot-color", DOT_ROW_COLORS[optIndex]);
+          dot.style.color = DOT_ROW_COLORS[optIndex];
+          dot.setAttribute("aria-label", col.theme + ": " + option);
+          dot.setAttribute("data-tooltip", option);
+          dot.addEventListener("mouseenter", function() { showDotTooltip(stage, dot); });
+          dot.addEventListener("mouseleave", function() { hideDotTooltip(stage); });
+          dot.addEventListener("focus", function() { showDotTooltip(stage, dot); });
+          dot.addEventListener("blur", function() { hideDotTooltip(stage); });
+          dots.appendChild(dot);
+        });
+
+        column.appendChild(dots);
+        columnsWrap.appendChild(column);
+      });
+
+      var tooltip = document.createElement("div");
+      tooltip.className = "dot-tooltip";
+
+      stage.appendChild(svg);
+      stage.appendChild(columnsWrap);
+      stage.appendChild(tooltip);
+      scroll.appendChild(stage);
+      target.appendChild(scroll);
+
+      requestAnimationFrame(function() {
+        drawDotGridLine(stage, svg);
+      });
+    }
+
+    function renderFinalSummaryFields() {
+      finalFieldMap.goal.textContent = goalField.value.trim();
+      finalFieldMap.commitment.textContent = commitmentField.value.trim();
+      finalFieldMap.strategies.textContent = strategiesField.value.trim();
+      finalFieldMap.issues.textContent = issuesField.value.trim();
+      finalFieldMap.partners.textContent = partnersField.value.trim();
+    }
+
+    function renderSummary() {
+      renderDotGrid(summaryGrid);
+      renderSummaryList(summaryList);
+      renderDotGrid(finalSummaryGrid);
+      renderSummaryList(finalSummaryList);
+      renderFinalSummaryFields();
+    }
+
+    function updateCompletionActions() {
+      var readyToComplete = allColumnsAnswered() && whatNextIsFilled();
+      completionActions.classList.toggle("visible", allColumnsAnswered());
+      completeButton.classList.toggle("hidden", !readyToComplete || isFinalized);
+      editButton.classList.toggle("hidden", !isFinalized);
+    }
+
+    function setWhatNextReadOnly(readOnly) {
+      whatNextFields.forEach(function(field) {
+        if (readOnly) {
+          field.setAttribute("readonly", "readonly");
+        } else {
+          field.removeAttribute("readonly");
+        }
+      });
+    }
+
+    function finalizeSummary() {
+      if (!allColumnsAnswered() || !whatNextIsFilled()) return;
+      isFinalized = true;
+      setWhatNextReadOnly(true);
+      renderSummary();
+      finalSummary.classList.add("visible");
+      updateCompletionActions();
+      setTimeout(function() {
+        finalSummary.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 60);
+    }
+
+    function unfinalizeSummary() {
+      isFinalized = false;
+      setWhatNextReadOnly(false);
+      finalSummary.classList.remove("visible");
+      updateCompletionActions();
+      setTimeout(function() {
+        whatNext.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 60);
+    }
+
     function updateSummaryAndNext() {
-      var allDone = selectedValues.every(function(v) { return v !== null; });
+      var allDone = allColumnsAnswered();
       summarySection.classList.toggle("visible", allDone);
       whatNext.classList.toggle("visible", allDone);
-      if (allDone) renderSummary();
+      if (allDone) {
+        renderSummary();
+      } else {
+        finalSummary.classList.remove("visible");
+        isFinalized = false;
+      }
+      updateCompletionActions();
     }
 
     // ── Collapse a completed column ──
@@ -829,11 +1374,8 @@
 
       card.style.display = "";
       collapsed.classList.remove("visible");
-
-      // Show next button since this column already has a value
       nextButtons[colIndex].classList.add("visible");
 
-      // Scroll to the re-opened column
       setTimeout(function() {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 50);
@@ -857,7 +1399,6 @@
       updateProgress();
       updateSummaryAndNext();
 
-      // Scroll forward only on first pass
       if (isFirstPass) {
         setTimeout(function() {
           if (furthestCompleted < columns.length) {
@@ -874,7 +1415,6 @@
       var section = document.createElement("div");
       section.className = "column-section" + (colIndex > 0 ? " future" : "");
 
-      // Collapsed summary row
       var collapsed = document.createElement("div");
       collapsed.className = "column-collapsed";
 
@@ -889,15 +1429,14 @@
       editBtn.type = "button";
       editBtn.className = "collapsed-edit";
       editBtn.textContent = "Edit";
-      (function(idx) {
-        editBtn.addEventListener("click", function() { expandColumn(idx); });
+      (function(index) {
+        editBtn.addEventListener("click", function() { expandColumn(index); });
       })(colIndex);
 
       collapsed.appendChild(collapsedTheme);
       collapsed.appendChild(collapsedAnswer);
       collapsed.appendChild(editBtn);
 
-      // Active column card
       var card = document.createElement("div");
       card.className = "column-card";
 
@@ -916,7 +1455,6 @@
       header.appendChild(themeEl);
       card.appendChild(header);
 
-      // Options stack
       var stack = document.createElement("div");
       stack.className = "choices-stack";
 
@@ -945,46 +1483,44 @@
         labelWrap.appendChild(choiceText);
         stack.appendChild(labelWrap);
 
-        // Change handler — using IIFE to capture correct indices
-        (function(ci, opt) {
+        (function(columnIndex, optionValue, optionIndex) {
           var autoTimer = null;
           input.addEventListener("change", function() {
-            selectedValues[ci] = opt;
-            nextButtons[ci].classList.add("visible");
+            selectedValues[columnIndex] = optionValue;
+            selectedIndexes[columnIndex] = optionIndex;
+            nextButtons[columnIndex].classList.add("visible");
+            updateSummaryAndNext();
 
-            // Auto-advance only on first pass (not when editing a completed column)
-            if (ci >= furthestCompleted) {
+            if (columnIndex >= furthestCompleted) {
               clearTimeout(autoTimer);
-              autoTimer = setTimeout(function() { advanceColumn(ci); }, AUTO_ADVANCE_DELAY_MS);
+              autoTimer = setTimeout(function() { advanceColumn(columnIndex); }, AUTO_ADVANCE_DELAY_MS);
             }
           });
 
-          // Expose cancel function so the Next button click handler can abort auto-advance
           input._cancelTimer = function() { clearTimeout(autoTimer); };
-        })(colIndex, option);
+        })(colIndex, option, optIndex);
       });
 
       card.appendChild(stack);
 
-      // Next button
       var nextWrap = document.createElement("div");
       nextWrap.className = "next-wrap";
 
       var nextBtn = document.createElement("button");
       nextBtn.type = "button";
       nextBtn.className = "next-btn";
-      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish \u2192" : "Next \u2192";
+      nextBtn.textContent = colIndex === columns.length - 1 ? "Finish →" : "Next →";
+      nextBtn.setAttribute("aria-label", colIndex === columns.length - 1 ? "Finish this theme" : "Go to the next theme");
       nextButtons[colIndex] = nextBtn;
 
-      (function(ci) {
+      (function(index) {
         nextBtn.addEventListener("click", function() {
-          if (selectedValues[ci] === null) return;
-          // Cancel any pending auto-advance timers for this column
+          if (selectedValues[index] === null) return;
           var inputs = card.querySelectorAll("input[type='radio']");
-          inputs.forEach(function(inp) {
-            if (inp._cancelTimer) inp._cancelTimer();
+          inputs.forEach(function(inputEl) {
+            if (inputEl._cancelTimer) inputEl._cancelTimer();
           });
-          advanceColumn(ci);
+          advanceColumn(index);
         });
       })(colIndex);
 
@@ -997,7 +1533,66 @@
       columnElements.push(section);
     });
 
+    whatNextFields.forEach(function(field) {
+      field.addEventListener("input", function() {
+        renderFinalSummaryFields();
+        updateCompletionActions();
+      });
+    });
+
+    completeButton.addEventListener("click", finalizeSummary);
+    editButton.addEventListener("click", unfinalizeSummary);
+    finalPrintButton.addEventListener("click", function() { window.print(); });
+    copyWhatNextButton.addEventListener("click", function() {
+      var originalLabel = "📋 Copy 'What next?'";
+      var copiedLabel = "Copied!";
+      var copyText = [
+        "My goal:",
+        goalField.value.trim(),
+        "",
+        "I will:",
+        commitmentField.value.trim(),
+        "",
+        "My strategies:",
+        strategiesField.value.trim()
+      ].join("\n");
+
+      function setCopiedState() {
+        copyWhatNextButton.textContent = copiedLabel;
+        setTimeout(function() {
+          copyWhatNextButton.textContent = originalLabel;
+        }, 2000);
+      }
+
+      function fallbackCopy() {
+        var fallback = document.createElement("textarea");
+        fallback.value = copyText;
+        document.body.appendChild(fallback);
+        fallback.select();
+        document.execCommand("copy");
+        document.body.removeChild(fallback);
+        setCopiedState();
+      }
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(copyText).then(setCopiedState).catch(fallbackCopy);
+      } else {
+        fallbackCopy();
+      }
+    });
+
+    window.addEventListener("resize", function() {
+      if (allColumnsAnswered()) {
+        renderDotGrid(summaryGrid);
+        if (finalSummary.classList.contains("visible")) {
+          renderDotGrid(finalSummaryGrid);
+        }
+      }
+    });
+
     updateProgress();
+    renderFinalSummaryFields();
+    updateCompletionActions();
   </script>
 </body>
 </html>
