@@ -667,7 +667,7 @@
     const ALL_ROWS_COMPLETE_INDEX = rows.length;
     // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
     const HIGHER_THRESHOLD = 70;
-    const SLIDER_LOWER_THRESHOLD = 30;
+    const SLIDER_LOW_LABEL_THRESHOLD = 30;
 
     let activeRowIndex = 0;
     let furthestUnlockedRow = 0;
@@ -689,7 +689,9 @@
 
     function advanceRow(rowIndex) {
       furthestUnlockedRow = Math.max(furthestUnlockedRow, rowIndex + 1);
-      activeRowIndex = rowIndex + 1 >= ALL_ROWS_COMPLETE_INDEX ? null : rowIndex + 1;
+      const nextRowIndex = rowIndex + 1;
+      if (nextRowIndex >= ALL_ROWS_COMPLETE_INDEX) activeRowIndex = null;
+      else activeRowIndex = nextRowIndex;
       renderRows();
     }
 
@@ -819,7 +821,7 @@
       indicator.style.setProperty("--line-position", `${100 - value}%`);
       let label = "middle";
       if (value >= HIGHER_THRESHOLD) label = "higher";
-      else if (value <= SLIDER_LOWER_THRESHOLD) label = "lower";
+      else if (value <= SLIDER_LOW_LABEL_THRESHOLD) label = "lower";
       lineValue.textContent = label;
       lineValueScreen.textContent = label;
     }
