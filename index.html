@@ -575,7 +575,7 @@
 
       <section class="panel">
         <h2>Where you're at</h2>
-        <p class="small-note">Choose what fits for this row, then move to the next one.</p>
+        <p class="small-note">Choose what fits for each row, then move to the next one.</p>
         <div id="grid" class="grid-wrap"></div>
       </section>
 
@@ -667,6 +667,7 @@
     // These percentage cutoffs translate the slider position into a simple higher / middle / lower print label.
     const HIGHER_THRESHOLD = 70;
     const LINE_LOWER_THRESHOLD = 30;
+    const POSITIVE_LIMIT = Math.min(POSITIVE_CELL_COUNT, LOWER_THRESHOLD);
 
     let activeRowIndex = 0;
     let furthestUnlockedRow = 0;
@@ -749,7 +750,7 @@
 
       row.forEach((item, itemIndex) => {
         const label = document.createElement("label");
-        label.className = `choice ${itemIndex < POSITIVE_CELL_COUNT && itemIndex < LOWER_THRESHOLD ? "positive" : "negative"}`;
+        label.className = `choice ${itemIndex < POSITIVE_LIMIT ? "positive" : "negative"}`;
         label.setAttribute("data-row-index", rowIndex);
 
         const input = document.createElement("input");
@@ -757,6 +758,7 @@
         input.name = `experience-${rowIndex}-${itemIndex}`;
         input.value = item;
         input.addEventListener("change", () => {
+          // Auto-advance only on first pass through the flow; completed rows stay editable without forcing a jump.
           if (rowIndex === activeRowIndex && rowIndex === furthestUnlockedRow && selectedCount(rowIndex) > 0) {
             advanceRow(rowIndex);
             return;
