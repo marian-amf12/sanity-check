@@ -384,6 +384,10 @@
       display: none;
     }
 
+    .screen-only {
+      display: inline;
+    }
+
     @media (max-width: 1180px) {
       .layout { grid-template-columns: 1fr; }
       .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
@@ -506,6 +510,10 @@
         color: var(--accent);
       }
 
+      .screen-only {
+        display: none !important;
+      }
+
       .footer {
         margin-top: 8mm;
         font-size: 8.5pt;
@@ -618,14 +626,14 @@
 
   <script>
     const rows = [
-      { name: "adventure", items: ["relief from shame and inhibitions", "sex is more enjoyable than ever", "self-confidence boost", "I feel like part of a community", "meaningful new friendship or relationship", "I'm also enjoying sober sex more now", "It's less important for me than it used to be"] },
-      { name: "fun", items: ["intimacy", "I am in good, caring company", "I generally stick to my plans and boundaries", "It generally leaves me feeling satisfied", "I have a fulfilling sex life", "I'm also enjoying my sober life", "the amount of chemsex in my life is stable"] },
-      { name: "I spend a lot of time looking for it", items: ["frequent bacterial STIs", "I've neglected some former hobbies", "I'm seeing old friends less", "sex acts that I'm not really into sober", "situations that I later regret", "I keep going for 2–3 days", "It's getting more prominent in my life"] },
-      { name: "GBL/GHB more than once a week", items: ["Mephedrone or 3-MMC more than once a month", "I forget my PrEP or HIV meds now & then", "I worry for some of the people I encounter", "I meet some people because they share drugs", "It's affecting my looks", "low mood & low energy lasting several days", "I feel ashamed of my chemsex"] },
-      { name: "I take G without exact dosing and timing", items: ["I share straws or pipes", "Tina or Monkey Dust regularly", "It's affecting my relationship with my partner", "I need a higher dose than I used to", "I don't have sober sex", "all my closest friends engage in chemsex", "I want to make a change"] },
-      { name: "I'm not protecting myself against HIV", items: ["I forget my PrEP or HIV meds regularly", "I inject (slam)", "chemsex (just about) every weekend", "my focus has shifted from sex to being high", "I also use alone", "I refuse until I run out", "I've tried to make changes but failed"] },
-      { name: "I combine G + alcohol", items: ["I'm not sure everything was consensual", "I share needles or injecting equipment", "I've missed days at work/uni", "problems with sleep/irritability/anxiety", "I can't stop thinking about it", "episodes of paranoia, hallucinations", "I use GBL/GHB 24/7"] },
-      { name: "I combine poppers + Viagra", items: ["I've overdosed on G", "I've overdosed on G several times", "I've needed emergency medical attention", "violations of consent", "I was newly diagnosed with HIV", "lost my job/dropped out of school", "suicidal thoughts"] }
+      { label: "adventure", cells: ["adventure", "relief from shame and inhibitions", "sex is more enjoyable than ever", "self-confidence boost", "I feel like part of a community", "meaningful new friendship or relationship", "I'm also enjoying sober sex more now", "It's less important for me than it used to be"] },
+      { label: "fun", cells: ["fun", "intimacy", "I am in good, caring company", "I generally stick to my plans and boundaries", "It generally leaves me feeling satisfied", "I have a fulfilling sex life", "I'm also enjoying my sober life", "the amount of chemsex in my life is stable"] },
+      { label: "I spend a lot of time looking for it", cells: ["I spend a lot of time looking for it", "frequent bacterial STIs", "I've neglected some former hobbies", "I'm seeing old friends less", "sex acts that I'm not really into sober", "situations that I later regret", "I keep going for 2–3 days", "It's getting more prominent in my life"] },
+      { label: "GBL/GHB more than once a week", cells: ["GBL/GHB more than once a week", "Mephedrone or 3-MMC more than once a month", "I forget my PrEP or HIV meds now & then", "I worry for some of the people I encounter", "I meet some people because they share drugs", "It's affecting my looks", "low mood & low energy lasting several days", "I feel ashamed of my chemsex"] },
+      { label: "I take G without exact dosing and timing", cells: ["I take G without exact dosing and timing", "I share straws or pipes", "Tina or Monkey Dust regularly", "It's affecting my relationship with my partner", "I need a higher dose than I used to", "I don't have sober sex", "all my closest friends engage in chemsex", "I want to make a change"] },
+      { label: "I'm not protecting myself against HIV", cells: ["I'm not protecting myself against HIV", "I forget my PrEP or HIV meds regularly", "I inject (slam)", "chemsex (just about) every weekend", "my focus has shifted from sex to being high", "I also use alone", "I refuse until I run out", "I've tried to make changes but failed"] },
+      { label: "I combine G + alcohol", cells: ["I combine G + alcohol", "I'm not sure everything was consensual", "I share needles or injecting equipment", "I've missed days at work/uni", "problems with sleep/irritability/anxiety", "I can't stop thinking about it", "episodes of paranoia, hallucinations", "I use GBL/GHB 24/7"] },
+      { label: "I combine poppers + Viagra", cells: ["I combine poppers + Viagra", "I've overdosed on G", "I've overdosed on G several times", "I've needed emergency medical attention", "violations of consent", "I was newly diagnosed with HIV", "lost my job/dropped out of school", "suicidal thoughts"] }
     ];
 
     const grid = document.getElementById("grid");
@@ -637,7 +645,7 @@
       const header = document.createElement("div");
       header.className = "row-header";
       header.innerHTML = `
-        <h3 class="row-name">${row.name}</h3>
+        <h3 class="row-name">${row.label}</h3>
         <div class="row-labels">
           <span class="pill positive">positive</span>
           <span class="pill negative">negative</span>
@@ -648,8 +656,7 @@
       const cards = document.createElement("div");
       cards.className = "cards";
 
-      const allItems = [row.name, ...row.items];
-      allItems.forEach((item, itemIndex) => {
+      row.cells.forEach((item, itemIndex) => {
         const label = document.createElement("label");
         label.className = `choice ${itemIndex < 4 ? "positive" : "negative"}`;
 
