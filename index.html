@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sanity Check</title>
+  <style>
+    :root {
+      --bg: #eff6f6;
+      --panel: #ffffff;
+      --panel-alt: #f8fbfb;
+      --text: #18333a;
+      --muted: #5e7780;
+      --border: #cfe0e4;
+      --accent: #2f7f82;
+      --accent-soft: #d8eff0;
+      --positive: #edf8f0;
+      --positive-border: #b9dfc3;
+      --negative: #fff1f1;
+      --negative-border: #e7c1c1;
+      --print-mark: #1e293b;
+      --shadow: 0 20px 45px rgba(25, 60, 72, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(47, 127, 130, 0.12), transparent 28%),
+        linear-gradient(180deg, #f4fbfb 0%, var(--bg) 100%);
+    }
+
+    a { color: var(--accent); }
+
+    .page {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .title-wrap h1 {
+      margin: 0 0 8px;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1;
+    }
+
+    .title-wrap p {
+      margin: 0;
+      font-size: 1.05rem;
+      color: var(--muted);
+    }
+
+    .print-button {
+      border: 0;
+      border-radius: 999px;
+      padding: 14px 22px;
+      background: linear-gradient(135deg, var(--accent), #235c6a);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow);
+      white-space: nowrap;
+    }
+
+    .privacy-note {
+      margin: 0 0 24px;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.9fr) minmax(0, 2.1fr) minmax(260px, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(207, 224, 228, 0.95);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+    }
+
+    .panel h2 {
+      margin: 0 0 16px;
+      font-size: 1.35rem;
+    }
+
+    .panel h3 {
+      margin: 24px 0 10px;
+      font-size: 1rem;
+    }
+
+    .panel p,
+    .panel li,
+    .panel label,
+    .panel .small-note {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .steps {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .grid-wrap {
+      display: grid;
+      gap: 14px;
+    }
+
+    .row-group {
+      background: var(--panel-alt);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      padding: 16px;
+    }
+
+    .row-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .row-name {
+      margin: 0;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+    }
+
+    .row-labels {
+      display: flex;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .pill.positive {
+      background: var(--positive);
+      color: #215d2d;
+    }
+
+    .pill.negative {
+      background: var(--negative);
+      color: #8a3131;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .choice {
+      position: relative;
+      display: block;
+      min-height: 100%;
+    }
+
+    .choice input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .choice-text {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      padding: 14px 12px;
+      font-size: 0.92rem;
+      line-height: 1.35;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .choice-text::before {
+      content: "";
+      flex: 0 0 18px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid currentColor;
+      margin-top: 1px;
+      opacity: 0.55;
+    }
+
+    .choice.positive .choice-text {
+      background: var(--positive);
+      border-color: var(--positive-border);
+      color: #234a2e;
+    }
+
+    .choice.negative .choice-text {
+      background: var(--negative);
+      border-color: var(--negative-border);
+      color: #6e2a2a;
+    }
+
+    .choice input:checked + .choice-text {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(24, 51, 58, 0.12);
+      border-color: var(--accent);
+      background: #ffffff;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .choice input:checked + .choice-text::before {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: inset 0 0 0 3px #fff;
+      opacity: 1;
+    }
+
+    .extras {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .field,
+    .textarea,
+    .text-input {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: #fff;
+      color: var(--text);
+      font: inherit;
+    }
+
+    .textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .divider-card {
+      margin-top: 24px;
+      padding: 18px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(216, 239, 240, 0.65), rgba(255, 255, 255, 0.85));
+      border: 1px solid var(--border);
+    }
+
+    .slider-wrap {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 18px;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .range-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 88px;
+      text-align: center;
+    }
+
+    .slider-stack {
+      position: relative;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scale {
+      position: relative;
+      width: 100%;
+      max-width: 84px;
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scale-track {
+      position: absolute;
+      inset: 12px auto;
+      width: 6px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #85c7bf 0%, #c6d7db 50%, #efb3b3 100%);
+      height: calc(100% - 24px);
+    }
+
+    .line-indicator {
+      position: absolute;
+      left: 50%;
+      width: 110px;
+      height: 4px;
+      border-radius: 999px;
+      background: var(--accent);
+      transform: translate(-50%, var(--line-offset, 50%));
+      top: var(--line-position, 50%);
+      box-shadow: 0 4px 16px rgba(47, 127, 130, 0.28);
+      pointer-events: none;
+    }
+
+    .range-input {
+      position: absolute;
+      width: 240px;
+      transform: rotate(-90deg);
+      accent-color: var(--accent);
+      background: transparent;
+    }
+
+    .slider-caption {
+      margin: 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .prompt-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .info-box {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 18px;
+      background: var(--accent-soft);
+      border: 1px solid #bddadc;
+      color: #234b57;
+    }
+
+    .footer {
+      margin-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .print-summary {
+      display: none;
+    }
+
+    @media (max-width: 1180px) {
+      .layout { grid-template-columns: 1fr; }
+      .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .page { padding: 16px; }
+      .header { flex-direction: column; }
+      .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .extras { grid-template-columns: 1fr; }
+      .slider-wrap { grid-template-columns: 1fr; }
+      .range-label { max-width: none; }
+      .slider-stack { min-height: 220px; }
+      .footer { flex-direction: column; }
+    }
+
+    @media print {
+      :root {
+        --text: #111827;
+        --muted: #4b5563;
+        --border: #94a3b8;
+      }
+
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
+      body {
+        background: #fff;
+        font-size: 10pt;
+      }
+
+      .page {
+        max-width: none;
+        padding: 0;
+      }
+
+      .print-button {
+        display: none !important;
+      }
+
+      .privacy-note {
+        background: #fff;
+      }
+
+      .layout {
+        grid-template-columns: 26% 46% 28%;
+        gap: 8mm;
+      }
+
+      .panel,
+      .row-group,
+      .divider-card,
+      .choice-text,
+      .field,
+      .textarea,
+      .text-input,
+      .info-box,
+      .privacy-note {
+        box-shadow: none !important;
+        background: #fff !important;
+        backdrop-filter: none !important;
+      }
+
+      .panel,
+      .row-group,
+      .divider-card,
+      .field,
+      .textarea,
+      .text-input,
+      .info-box,
+      .privacy-note {
+        border-color: #9ca3af !important;
+      }
+
+      .cards {
+        gap: 4px;
+      }
+
+      .choice-text {
+        padding: 6px 7px;
+        border-width: 1px;
+        font-size: 8.1pt;
+      }
+
+      .choice-text::before {
+        width: 12px;
+        height: 12px;
+        flex-basis: 12px;
+        border-width: 1.5px;
+      }
+
+      .choice input:checked + .choice-text::before {
+        background: var(--print-mark) !important;
+        border-color: var(--print-mark) !important;
+        box-shadow: inset 0 0 0 1.5px #fff !important;
+      }
+
+      .choice input:checked + .choice-text {
+        font-weight: 700;
+        border-color: var(--print-mark) !important;
+      }
+
+      .slider-stack {
+        min-height: 170px;
+      }
+
+      .scale {
+        min-height: 160px;
+      }
+
+      .range-input {
+        display: none;
+      }
+
+      .print-summary {
+        display: inline;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .footer {
+        margin-top: 8mm;
+        font-size: 8.5pt;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="title-wrap">
+        <h1>Sanity Check</h1>
+        <p>In connection with chemsex, I'm experiencing...</p>
+      </div>
+      <button class="print-button" type="button" onclick="window.print()">🖨 Print / Save as PDF</button>
+    </header>
+
+    <p class="privacy-note">
+      Fill this in privately on your own device. Nothing is submitted or stored — you can print or save the page as a PDF when you're ready.
+    </p>
+
+    <main class="layout">
+      <section class="panel">
+        <h2>How it works</h2>
+        <p>This check-in is for people who want to reflect on how chemsex is showing up in their lives right now.</p>
+        <ol class="steps">
+          <li>Select the statements that fit where you're at today.</li>
+          <li>Set your red line: what still feels acceptable, and what you would rather avoid.</li>
+        </ol>
+        <h3>How to use this page</h3>
+        <p>There are no scores and no right answers. Use it to notice what feels good, what feels difficult, and what you may want to change.</p>
+        <h3>Tip</h3>
+        <p>If you want to discuss it with someone, bring your printed or saved version to a trusted professional or support contact.</p>
+      </section>
+
+      <section class="panel">
+        <h2>Where you're at</h2>
+        <div id="grid" class="grid-wrap"></div>
+
+        <div class="extras">
+          <div>
+            <label class="field-label" for="extra-positive">Additional positive effects:</label>
+            <input class="text-input" id="extra-positive" type="text" placeholder="Add your own notes">
+          </div>
+          <div>
+            <label class="field-label" for="extra-negative">Additional negative effects:</label>
+            <input class="text-input" id="extra-negative" type="text" placeholder="Add your own notes">
+          </div>
+        </div>
+
+        <div class="divider-card">
+          <h2>Your red line</h2>
+          <div class="slider-wrap">
+            <div class="range-label">Above = acceptable to me</div>
+            <div>
+              <div class="slider-stack">
+                <div class="scale">
+                  <div class="scale-track"></div>
+                  <div class="line-indicator" id="line-indicator"></div>
+                  <input id="red-line" class="range-input" type="range" min="0" max="100" value="50" aria-label="Your red line">
+                </div>
+              </div>
+              <p class="slider-caption">Red line position: <span id="line-value" class="print-summary">middle</span><span class="screen-only"> <span id="line-value-screen">middle</span></span></p>
+            </div>
+            <div class="range-label">Below = would prefer to avoid</div>
+          </div>
+
+          <div class="prompt-list">
+            <div>
+              <label class="field-label" for="strategies">What strategies can help you stick to your line?</label>
+              <textarea class="textarea" id="strategies" placeholder="Write down what helps you protect your boundaries."></textarea>
+            </div>
+            <div>
+              <label class="field-label" for="issues">Are there any particular issues you want to address?</label>
+              <textarea class="textarea" id="issues" placeholder="Write down anything that needs attention."></textarea>
+            </div>
+            <div>
+              <label class="field-label" for="partners">Which of your chemsex partners share your boundaries?</label>
+              <textarea class="textarea" id="partners" placeholder="List names, initials, or qualities if helpful."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>What next?</h2>
+        <div>
+          <label class="field-label" for="goal">My Sanity Check goal:</label>
+          <textarea class="textarea" id="goal" placeholder="e.g. more self control / less frequent sessions / abstinence"></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="commitment">Today/from now on, I will:</label>
+          <textarea class="textarea" id="commitment" placeholder="e.g. quit my most problematic substance, go home at dawn, make other plans for this weekend, book a counseling session, delete certain apps/contacts..."></textarea>
+        </div>
+
+        <div class="info-box">
+          Want to talk about it? At GGD Amsterdam chemsex counseling we're happy to discuss any thoughts and feelings you have about your sex life and your substance use.
+        </div>
+
+        <p><a href="https://ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks">ggd.amsterdam.nl/infectieziekten/soa-hiv-en-sense/chemseks</a></p>
+        <p class="small-note">Need more information about substances, harm reduction tips, support groups or specialised care? → <a href="https://chemsex.nl">chemsex.nl</a></p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Inspired by the Chemsex Check format.</span>
+      <span>CheckPoint BLN</span>
+    </footer>
+  </div>
+
+  <script>
+    const rows = [
+      { name: "adventure", items: ["relief from shame and inhibitions", "sex is more enjoyable than ever", "self-confidence boost", "I feel like part of a community", "meaningful new friendship or relationship", "I'm also enjoying sober sex more now", "It's less important for me than it used to be"] },
+      { name: "fun", items: ["intimacy", "I am in good, caring company", "I generally stick to my plans and boundaries", "It generally leaves me feeling satisfied", "I have a fulfilling sex life", "I'm also enjoying my sober life", "the amount of chemsex in my life is stable"] },
+      { name: "I spend a lot of time looking for it", items: ["frequent bacterial STIs", "I've neglected some former hobbies", "I'm seeing old friends less", "sex acts that I'm not really into sober", "situations that I later regret", "I keep going for 2–3 days", "It's getting more prominent in my life"] },
+      { name: "GBL/GHB more than once a week", items: ["Mephedrone or 3-MMC more than once a month", "I forget my PrEP or HIV meds now & then", "I worry for some of the people I encounter", "I meet some people because they share drugs", "It's affecting my looks", "low mood & low energy lasting several days", "I feel ashamed of my chemsex"] },
+      { name: "I take G without exact dosing and timing", items: ["I share straws or pipes", "Tina or Monkey Dust regularly", "It's affecting my relationship with my partner", "I need a higher dose than I used to", "I don't have sober sex", "all my closest friends engage in chemsex", "I want to make a change"] },
+      { name: "I'm not protecting myself against HIV", items: ["I forget my PrEP or HIV meds regularly", "I inject (slam)", "chemsex (just about) every weekend", "my focus has shifted from sex to being high", "I also use alone", "I refuse until I run out", "I've tried to make changes but failed"] },
+      { name: "I combine G + alcohol", items: ["I'm not sure everything was consensual", "I share needles or injecting equipment", "I've missed days at work/uni", "problems with sleep/irritability/anxiety", "I can't stop thinking about it", "episodes of paranoia, hallucinations", "I use GBL/GHB 24/7"] },
+      { name: "I combine poppers + Viagra", items: ["I've overdosed on G", "I've overdosed on G several times", "I've needed emergency medical attention", "violations of consent", "I was newly diagnosed with HIV", "lost my job/dropped out of school", "suicidal thoughts"] }
+    ];
+
+    const grid = document.getElementById("grid");
+
+    rows.forEach((row, rowIndex) => {
+      const group = document.createElement("section");
+      group.className = "row-group";
+
+      const header = document.createElement("div");
+      header.className = "row-header";
+      header.innerHTML = `
+        <h3 class="row-name">${row.name}</h3>
+        <div class="row-labels">
+          <span class="pill positive">positive</span>
+          <span class="pill negative">negative</span>
+        </div>
+      `;
+      group.appendChild(header);
+
+      const cards = document.createElement("div");
+      cards.className = "cards";
+
+      const allItems = [row.name, ...row.items];
+      allItems.forEach((item, itemIndex) => {
+        const label = document.createElement("label");
+        label.className = `choice ${itemIndex < 4 ? "positive" : "negative"}`;
+
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.name = `row-${rowIndex}`;
+        input.value = item;
+
+        const text = document.createElement("span");
+        text.className = "choice-text";
+        text.textContent = item;
+
+        label.appendChild(input);
+        label.appendChild(text);
+        cards.appendChild(label);
+      });
+
+      group.appendChild(cards);
+      grid.appendChild(group);
+    });
+
+    const slider = document.getElementById("red-line");
+    const indicator = document.getElementById("line-indicator");
+    const lineValue = document.getElementById("line-value");
+    const lineValueScreen = document.getElementById("line-value-screen");
+
+    function updateLine() {
+      const value = Number(slider.value);
+      indicator.style.setProperty("--line-position", `${100 - value}%`);
+      let label = "middle";
+      if (value >= 70) label = "higher";
+      else if (value <= 30) label = "lower";
+      lineValue.textContent = label;
+      lineValueScreen.textContent = label;
+    }
+
+    slider.addEventListener("input", updateLine);
+    updateLine();
+  </script>
+</body>
+</html>
